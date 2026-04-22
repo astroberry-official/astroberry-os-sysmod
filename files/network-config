@@ -1,0 +1,17 @@
+#network:
+#  version: 2
+#
+#  ethernets:
+#    eth0:
+#      dhcp4: true
+#      optional: true
+#
+#  wifis:
+#    wlan0:
+#      dhcp4: no
+#      addresses: [10.42.0.1/24]
+#      access-points:
+#        "astroberry":
+#          password: "astroberry"
+#          mode: ap
+#      regulatory-domain: GB

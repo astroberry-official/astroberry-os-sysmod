@@ -1,0 +1,6 @@
+#!/bin/bash
+# prerm script for astroberry-os-sysmod
+
+if [ "$1" == "remove" -o "$1" == "purge" ]; then
+
+fi

@@ -1,0 +1,23 @@
+#!/bin/bash
+# postinst script for astroberry-os-sysmod
+
+if [ "$1" == "configure" ]; then
+
+	# Install astroberry-manager
+	python -m venv /opt/astroberry-manager && /opt/astroberry-manager/bin/pip install astroberry_manager@git+https://github.com/astroberry-official/astroberry-manager
+
+	# Remove astrodmx from top level menu
+	if [ -e /usr/share/desktop-directories/astrodmx.directory ]; then
+		echo "NoDisplay=true" >> /usr/share/desktop-directories/astrodmx.directory
+	fi
+
+	# Disable graphical login
+	update-rc.d lightdm disable
+
+
+	# Set wireless regulatory domain
+	if [ -e /boot/firmware/cmdline.txt ]; then
+		sed -i -e "s/\s*cfg80211.ieee80211_regdom=\S*//" -e "s/\(.*\)/\1 cfg80211.ieee80211_regdom=GB/" /boot/firmware/cmdline.txt
+	fi
+
+fi
