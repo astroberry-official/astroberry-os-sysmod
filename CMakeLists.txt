@@ -37,10 +37,10 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 	# Add hotspot
         install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/hotspot/Hotspot.nmconnection DESTINATION ${CONFIG_INSTALL_DIR}/NetworkManager/system-connections PERMISSIONS OWNER_READ OWNER_WRITE)
 	# Add custom desktop config
-        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/desktop/lightdm-gtk-greeter.conf DESTINATION ${CONFIG_INSTALL_DIR}/lightdm/lightdm-gtk-greeter.conf)
-        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/desktop/xfce4-session.xml DESTINATION ${CONFIG_INSTALL_DIR}/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml)
-        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/desktop/xsettings.xml DESTINATION ${CONFIG_INSTALL_DIR}/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml)
-        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/desktop/default.xml DESTINATION ${CONFIG_INSTALL_DIR}/xdg/xfce4/panel/default.xml)
+        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/desktop/lightdm-gtk-greeter.conf DESTINATION ${CONFIG_INSTALL_DIR}/lightdm)
+        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/desktop/xfce4-session.xml DESTINATION ${CONFIG_INSTALL_DIR}/xdg/xfce4/xfconf/xfce-perchannel-xml)
+        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/desktop/xsettings.xml DESTINATION ${CONFIG_INSTALL_DIR}/xdg/xfce4/xfconf/xfce-perchannel-xml)
+        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/desktop/default.xml DESTINATION ${CONFIG_INSTALL_DIR}/xdg/xfce4/panel)
         install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/desktop/xfce-applications.menu DESTINATION ${CONFIG_INSTALL_DIR}/xdg/menus)
 	# Add cloud-init config
         install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/cloudinit/meta-data DESTINATION ${BOOT_INSTALL_DIR}/firmware)
