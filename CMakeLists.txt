@@ -6,7 +6,7 @@ set (VERSION_MINOR 2)
 set (VERSION_RELEASE 0)
 
 set(CONFIG_INSTALL_DIR "/etc")
-set(BOOT_INSTALL_DIR "/etc")
+set(BOOT_INSTALL_DIR "/boot")
 set(BIN_INSTALL_DIR "/usr/bin")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
