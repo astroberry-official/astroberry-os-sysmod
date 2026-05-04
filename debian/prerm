@@ -17,8 +17,11 @@ if [ "$1" == "remove" -o "$1" == "purge" ]; then
         # Disable Websockify
         systemctl stop websockify.service && systemctl disable websockify.service
 
-	# Restore default cloud-init config files
+	# Restore default config files
 	if [ -e /boot/firmware/meta-data.default ]; then mv /boot/firmware/meta-data.default /boot/firmware/meta-data; fi
 	if [ -e /boot/firmware/user-data.default ]; then mv /boot/firmware/user-data.default /boot/firmware/user-data; fi
 	if [ -e /boot/firmware/network-config.default ]; then mv /boot/firmware/network-config.default /boot/firmware/network-config; fi
+	if [ -e /etc/caddy/Caddyfile.default ]; then mv /etc/caddy/Caddyfile.default /etc/caddy/Caddyfile; fi
+	if [ -e /etc/samba/smb.conf.default ]; then mv /etc/samba/smb.conf.default /etc/samba/smb.conf; fi
+
 fi

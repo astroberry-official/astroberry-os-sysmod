@@ -24,16 +24,12 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
         install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/polkit/10-file-manager.rules DESTINATION ${CONFIG_INSTALL_DIR}/polkit-1/rules.d)
         install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/polkit/10-network-manager.rules DESTINATION ${CONFIG_INSTALL_DIR}/polkit-1/rules.d)
 	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/polkit/10-synaptic.rules DESTINATION ${CONFIG_INSTALL_DIR}/polkit-1/rules.d)
-	# Add reverse proxy config
-        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/revproxy/Caddyfile DESTINATION ${CONFIG_INSTALL_DIR}/caddy)
 	# Add system services
 	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/services/vncserver.service DESTINATION ${CONFIG_INSTALL_DIR}/systemd/system)
 	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/services/indiwebmanager.service DESTINATION ${CONFIG_INSTALL_DIR}/systemd/system)
 	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/services/websockify.service DESTINATION ${CONFIG_INSTALL_DIR}/systemd/system)
         install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/services/astroberry-manager.service DESTINATION ${CONFIG_INSTALL_DIR}/systemd/system)
         install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/services/astroberry.service DESTINATION ${CONFIG_INSTALL_DIR}/avahi/services)
-	# Add file sharing config
-	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/filesharing/smb.conf DESTINATION ${CONFIG_INSTALL_DIR}/samba)
 	# Add hotspot
         install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/hotspot/Hotspot.nmconnection DESTINATION ${CONFIG_INSTALL_DIR}/NetworkManager/system-connections PERMISSIONS OWNER_READ OWNER_WRITE)
 	# Add custom desktop config

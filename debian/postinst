@@ -53,28 +53,90 @@ EOF
 #      regulatory-domain: GB
 #EOF
 
-	# Set wireless regulatory domain
-	if [ -e /boot/firmware/cmdline.txt ] && [ -z "$(grep cfg80211.ieee80211_regdom /boot/firmware/cmdline.txt)" ]; then
-		sed -i -e "s/\s*cfg80211.ieee80211_regdom=\S*//" -e "s/\(.*\)/\1 cfg80211.ieee80211_regdom=GB/" /boot/firmware/cmdline.txt
-	fi
+# Set wireless regulatory domain
+if [ -e /boot/firmware/cmdline.txt ] && [ -z "$(grep cfg80211.ieee80211_regdom /boot/firmware/cmdline.txt)" ]; then
+	sed -i -e "s/\s*cfg80211.ieee80211_regdom=\S*//" -e "s/\(.*\)/\1 cfg80211.ieee80211_regdom=GB/" /boot/firmware/cmdline.txt
+fi
 
-	# Install astroberry-manager
-	if [ ! -e /opt/astroberry-manager ]; then python -m venv /opt/astroberry-manager; fi
-	/opt/astroberry-manager/bin/pip install --upgrade astroberry_manager@git+https://github.com/astroberry-official/astroberry-manager
+# Set reverse proxy / caddy
+if [ -e /etc/caddy/Caddyfile ]; then cp /etc/caddy/Caddyfile /etc/caddy/Caddyfile.default; fi
+cat <<EOF > /etc/caddy/Caddyfile
+{
+	auto_https disable_redirects
+}
 
-	# Disable graphical login
-	# update-rc.d lightdm disable
+http://astroberry.local {
+        handle /api* {
+            reverse_proxy localhost:8624
+        }
+        handle /websockify* {
+            reverse_proxy localhost:8070
+        }
+        handle /* {
+            reverse_proxy localhost:8080
+        }
+}
 
-	# Enable TigerVNC
-	# ln -s /etc/systemd/system/vncserver.service /etc/systemd/system/multi-user.target.wants/
+https://astroberry.local {
+        handle /api* {
+            reverse_proxy localhost:8624
+        }
+        handle /websockify* {
+            reverse_proxy localhost:8070
+        }
+        handle /* {
+            reverse_proxy localhost:8080
+        }
+}
+EOF
 
-	# Enable INDI Web Manager
-	# ln -s /etc/systemd/system/indiwebmanager.service /etc/systemd/system/multi-user.target.wants/
+# Set filesharing / samba
+if [ -e /etc/samba/smb.conf ]; then cp /etc/samba/smb.conf /etc/samba/smb.conf.default; fi
+cat <<EOF > /etc/samba/smb.conf
+[global]
+   workgroup = WORKGROUP
+   log file = /var/log/samba/log.%m
+   max log size = 1000
+   logging = file
+   panic action = /usr/share/samba/panic-action %d
+   server role = standalone server
+   obey pam restrictions = yes
+   unix password sync = yes
+   passwd program = /usr/bin/passwd %u
+   passwd chat = *Enter\snew\s*\spassword:* %n\n *Retype\snew\s*\spassword:* %n\n *password\supdated\ssuccessfully* .
+   pam password change = yes
+   map to guest = bad user
+   usershare allow guests = no
+   multicast dns register = no
 
-	# Enable Websockify
-	# ln -s /etc/systemd/system/websockify.service /etc/systemd/system/multi-user.target.wants/
+[Shared Files]
+   comment = Shared Files
+   path = /home/astroberry/Shared
+   browseable = yes
+   writeable = yes
+   read only = no
+   create mask = 0644
+   directory mask = 0755
+   valid users = astroberry
+EOF
 
-	# Enable Astroberry Manager
-	# ln -s /etc/systemd/system/astroberry-manager.service /etc/systemd/system/multi-user.target.wants/
+# Install astroberry-manager
+if [ ! -e /opt/astroberry-manager ]; then python -m venv /opt/astroberry-manager; fi
+/opt/astroberry-manager/bin/pip install --upgrade astroberry_manager@git+https://github.com/astroberry-official/astroberry-manager
+
+# Disable graphical login
+# update-rc.d lightdm disable
+
+# Enable TigerVNC
+# ln -s /etc/systemd/system/vncserver.service /etc/systemd/system/multi-user.target.wants/
+
+# Enable INDI Web Manager
+# ln -s /etc/systemd/system/indiwebmanager.service /etc/systemd/system/multi-user.target.wants/
+
+# Enable Websockify
+# ln -s /etc/systemd/system/websockify.service /etc/systemd/system/multi-user.target.wants/
+
+# Enable Astroberry Manager
+# ln -s /etc/systemd/system/astroberry-manager.service /etc/systemd/system/multi-user.target.wants/
 
 fi
