@@ -6,9 +6,8 @@ set -e
 if [ "$1" == "configure" ]; then
 
 # Set cloud-init
-if [ -e /boot/firmware/meta-data ]; then sed -i "s/instance_id: .*/instance_id: astroberryos-image/g" /boot/firmware/meta-data; fi
+sed -i "s/instance_id: .*/instance_id: astroberryos-image/g" /boot/firmware/meta-data
 
-if [ -e /boot/firmware/user-data ]; then cp /boot/firmware/user-data /boot/firmware/user-data.default; fi
 cat <<EOF > /boot/firmware/user-data
 #cloud-config
 hostname: astroberry
@@ -32,7 +31,6 @@ runcmd:
 - astroberry-init
 EOF
 
-#if [ -e /boot/firmware/network-config ]; then cp /boot/firmware/network-config /boot/firmware/network-config.default; fi
 #cat <<EOF > /boot/firmware/network-config
 #network:
 #  version: 2
@@ -59,7 +57,6 @@ if [ -e /boot/firmware/cmdline.txt ] && [ -z "$(grep cfg80211.ieee80211_regdom /
 fi
 
 # Set reverse proxy / caddy
-if [ -e /etc/caddy/Caddyfile ]; then cp /etc/caddy/Caddyfile /etc/caddy/Caddyfile.default; fi
 cat <<EOF > /etc/caddy/Caddyfile
 {
 	auto_https disable_redirects
@@ -91,7 +88,6 @@ https://astroberry.local {
 EOF
 
 # Set filesharing / samba
-if [ -e /etc/samba/smb.conf ]; then cp /etc/samba/smb.conf /etc/samba/smb.conf.default; fi
 cat <<EOF > /etc/samba/smb.conf
 [global]
    workgroup = WORKGROUP
@@ -118,6 +114,153 @@ cat <<EOF > /etc/samba/smb.conf
    create mask = 0644
    directory mask = 0755
    valid users = astroberry
+EOF
+
+
+# Customize login greeter
+sed -i "s/^#background=.*/background=\/usr\/share\/astroberry-artwork\/backgrounds\/milkyway-galaxy-center-and-its-companions_1920x1080.jpg/g" /etc/lightdm/lightdm-gtk-greeter.conf
+sed -i "s/^#font-name=.*/font-name=Roboto/g" /etc/lightdm/lightdm-gtk-greeter.conf
+echo "default-user-image=/usr/share/astroberry-artwork/icons/astroberry-avatar-500.png" >> /etc/lightdm/lightdm-gtk-greeter.conf
+
+# Fix vnc slow down on headless system: xfwm4 --compositor=off --vblank=off --replace
+sed -i "s/<value type=\"string\" value=\"xfwm4\"\/>/<value type=\"string\" value=\"xfwm4\"\/><value type=\"string\" value=\"--compositor=off\"\/><value type=\"string\" value=\"--vblank=off\"\/>/g" \
+    /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml
+
+# Customize GTK settings
+sed -i "s/<property name=\"ThemeName\" type=\"string\" value=\".*\"\/>/<property name=\"ThemeName\" type=\"string\" value=\"Adwaita-dark\"\/>/g" \
+    /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
+sed -i "s/<property name=\"FontName\" type=\"string\" value=\".*\"\/>/<property name=\"FontName\" type=\"string\" value=\"Roboto 11\"\/>/g" \
+    /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
+sed -i "s/<property name=\"MonospaceFontName\" type=\"string\" value=\".*\"\/>/<property name=\"MonospaceFontName\" type=\"string\" value=\"Monospace 11\"\/>/g" \
+    /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
+
+# Enable dark mode for panels
+sed -i "s/<property name=\"dark-mode\" type=\"bool\" value=\".*\"\/>/<property name=\"dark-mode\" type=\"bool\" value=\"true\"\/>/g" \
+    /etc/xdg/xfce4/panel/default.xml
+
+# Customize panel 1
+sed -i "s/<property name=\"size\" type=\"uint\" value=\".*\"\/>/<property name=\"size\" type=\"uint\" value=\"38\"\/>/g" \
+    /etc/xdg/xfce4/panel/default.xml
+sed -i "s/<property name=\"icon-size\" type=\"uint\" value=\".*\"\/>/<property name=\"icon-size\" type=\"uint\" value=\"0\"\/>/g" \
+    /etc/xdg/xfce4/panel/default.xml
+
+# Customize menu layout
+cat <<EOF > /etc/xdg/menus/xfce-applications.menu
+<!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
+  "http://www.freedesktop.org/standards/menu-spec/1.0/menu.dtd">
+
+<Menu>
+    <Name>Astroberry</Name>
+
+    <DefaultAppDirs/>
+    <DefaultDirectoryDirs/>
+
+    <Include>
+        <Category>X-Xfce-Toplevel</Category>
+    </Include>
+
+    <Exclude>
+        <Filename>xfce4-mail-reader.desktop</Filename>
+    </Exclude>
+
+    <Layout>
+        <Filename>xfce4-run.desktop</Filename>
+        <Separator/>
+        <Filename>xfce4-terminal-emulator.desktop</Filename>
+        <Filename>xfce4-file-manager.desktop</Filename>
+        <Filename>xfce4-web-browser.desktop</Filename>
+        <Separator/>
+        <Menuname>Astronomy</Menuname>
+        <Separator/>
+        <Merge type="all"/>
+        <Separator/>
+        <Filename>xfce4-about.desktop</Filename>
+        <Filename>xfce4-session-logout.desktop</Filename>
+    </Layout>
+
+    <Menu>
+        <Name>Astronomy</Name>
+        <Directory>xfce-astronomy.directory</Directory>
+        <Include>
+            <Category>Science</Category>
+            <Category>Education</Category>
+            <Category>AstroImaging</Category>
+            <Filename>com.google.sites.ser-player.desktop</Filename>
+        </Include>
+    </Menu>
+
+    <Menu>
+        <Name>Settings</Name>
+        <Directory>xfce-settings.directory</Directory>
+        <Include>
+            <Category>Settings</Category>
+        </Include>
+
+        <Layout>
+            <Filename>xfce-settings-manager.desktop</Filename>
+            <Separator/>
+            <Merge type="all"/>
+        </Layout>
+
+        <Menu>
+            <Name>Screensavers</Name>
+            <Directory>xfce-screensavers.directory</Directory>
+            <Include>
+                <Category>Screensaver</Category>
+            </Include>
+        </Menu>
+    </Menu>
+
+    <Menu>
+        <Name>Accessories</Name>
+        <Directory>xfce-accessories.directory</Directory>
+        <Include>
+            <Or>
+                <Category>Accessibility</Category>
+                <Category>Core</Category>
+                <Category>Legacy</Category>
+                <Category>Utility</Category>
+            </Or>
+        </Include>
+        <Exclude>
+            <Or>
+                <Filename>xfce4-file-manager.desktop</Filename>
+                <Filename>xfce4-terminal-emulator.desktop</Filename>
+                <Filename>xfce4-about.desktop</Filename>
+                <Filename>xfce4-run.desktop</Filename>
+            </Or>
+        </Exclude>
+    </Menu>
+
+    <Menu>
+        <Name>System</Name>
+        <Directory>xfce-system.directory</Directory>
+        <Include>
+            <Or>
+                <Category>Emulator</Category>
+                <Category>System</Category>
+            </Or>
+        </Include>
+        <Exclude>
+            <Or>
+                <Filename>xfce4-session-logout.desktop</Filename>
+            </Or>
+        </Exclude>
+    </Menu>
+
+
+    <Menu>
+        <Name>Other</Name>
+        <Directory>xfce-other.directory</Directory>
+        <OnlyUnallocated/>
+        <Include>
+            <All/>
+        </Include>
+    </Menu>
+    <DefaultMergeDirs/>
+
+</Menu>
+
 EOF
 
 # Install astroberry-manager
