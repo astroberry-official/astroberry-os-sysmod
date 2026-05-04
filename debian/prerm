@@ -2,19 +2,12 @@
 # prerm script for astroberry-os-sysmod
 
 if [ "$1" == "remove" -o "$1" == "purge" ]; then
-        # Disable Astroberry Manager
+
+        # Disable services
         systemctl stop astroberry-manager.service && systemctl disable astroberry-manager.service
-
-	# Remove Astroberry Manager
 	if [ -e /opt/astroberry-manager ]; then rm -rf /opt/astroberry-manager; fi
-
-        # Disable INDI Web Manager
         systemctl stop indiwebmanager.service && systemctl disable indiwebmanager.service
-
-        # Disable TigerVNC
         systemctl stop vncserver.service && systemctl disable vncserver.service
-
-        # Disable Websockify
         systemctl stop websockify.service && systemctl disable websockify.service
 
 fi

@@ -268,18 +268,12 @@ if [ ! -e /opt/astroberry-manager ]; then python -m venv /opt/astroberry-manager
 /opt/astroberry-manager/bin/pip install --upgrade astroberry_manager@git+https://github.com/astroberry-official/astroberry-manager
 
 # Disable graphical login
-# update-rc.d lightdm disable
+update-rc.d lightdm disable
 
-# Enable TigerVNC
-# ln -s /etc/systemd/system/vncserver.service /etc/systemd/system/multi-user.target.wants/
-
-# Enable INDI Web Manager
-# ln -s /etc/systemd/system/indiwebmanager.service /etc/systemd/system/multi-user.target.wants/
-
-# Enable Websockify
-# ln -s /etc/systemd/system/websockify.service /etc/systemd/system/multi-user.target.wants/
-
-# Enable Astroberry Manager
-# ln -s /etc/systemd/system/astroberry-manager.service /etc/systemd/system/multi-user.target.wants/
+# Enable services
+ln -s /etc/systemd/system/indiwebmanager.service /etc/systemd/system/multi-user.target.wants/
+ln -s /etc/systemd/system/vncserver.service /etc/systemd/system/multi-user.target.wants/
+ln -s /etc/systemd/system/websockify.service /etc/systemd/system/multi-user.target.wants/
+ln -s /etc/systemd/system/astroberry-manager.service /etc/systemd/system/multi-user.target.wants/
 
 fi
