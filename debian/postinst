@@ -5,14 +5,62 @@ set -e
 
 if [ "$1" == "configure" ]; then
 
-	# Install astroberry-manager
-	if [ ! -e /opt/astroberry-manager ]; then python -m venv /opt/astroberry-manager; fi
-	/opt/astroberry-manager/bin/pip install --upgrade astroberry_manager@git+https://github.com/astroberry-official/astroberry-manager
+# Set cloud-init
+if [ -e /boot/firmware/meta-data ]; then sed -i "s/instance_id: .*/instance_id: astroberryos-image/g" /boot/firmware/meta-data; fi
+
+if [ -e /boot/firmware/user-data ]; then cp /boot/firmware/user-data /boot/firmware/user-data.default; fi
+cat <<EOF > /boot/firmware/user-data
+#cloud-config
+hostname: astroberry
+manage_etc_hosts: true
+
+users:
+- name: astroberry
+  groups: users,adm,dialout,audio,netdev,video,plugdev,cdrom,games,input,gpio,spi,i2c,render,sudo
+  shell: /bin/bash
+  lock_passwd: false
+  passwd: \$5\$MRvtBeRUfh\$QGv7UN3cnLPJ00paa82TjuwrjqiFvpj/JDgKKd7ikh4
+  sudo: ALL=(ALL) NOPASSWD:ALL
+
+ssh_pwauth: true
+
+timezone: Etc/UTC
+
+runcmd:
+- localectl set-x11-keymap "us" pc105
+- setupcon -k --force || true
+- astroberry-init
+EOF
+
+#if [ -e /boot/firmware/network-config ]; then cp /boot/firmware/network-config /boot/firmware/network-config.default; fi
+#cat <<EOF > /boot/firmware/network-config
+#network:
+#  version: 2
+#
+#  ethernets:
+#    eth0:
+#      dhcp4: true
+#      optional: true
+#
+#  wifis:
+#    wlan0:
+#      dhcp4: no
+#      addresses: [10.42.0.1/24]
+#      access-points:
+#        "astroberry":
+#          password: "astroberry"
+#          mode: ap
+#      regulatory-domain: GB
+#EOF
 
 	# Set wireless regulatory domain
 	if [ -e /boot/firmware/cmdline.txt ] && [ -z "$(grep cfg80211.ieee80211_regdom /boot/firmware/cmdline.txt)" ]; then
 		sed -i -e "s/\s*cfg80211.ieee80211_regdom=\S*//" -e "s/\(.*\)/\1 cfg80211.ieee80211_regdom=GB/" /boot/firmware/cmdline.txt
 	fi
+
+	# Install astroberry-manager
+	if [ ! -e /opt/astroberry-manager ]; then python -m venv /opt/astroberry-manager; fi
+	/opt/astroberry-manager/bin/pip install --upgrade astroberry_manager@git+https://github.com/astroberry-official/astroberry-manager
 
 	# Disable graphical login
 	# update-rc.d lightdm disable
