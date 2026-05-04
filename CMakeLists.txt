@@ -32,10 +32,6 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
         install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/services/astroberry.service DESTINATION ${CONFIG_INSTALL_DIR}/avahi/services)
 	# Add hotspot
         install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/hotspot/Hotspot.nmconnection DESTINATION ${CONFIG_INSTALL_DIR}/NetworkManager/system-connections PERMISSIONS OWNER_READ OWNER_WRITE)
-	# Add custom desktop config
-        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/desktop/xfce4-desktop.xml DESTINATION ${CONFIG_INSTALL_DIR}/xdg/xfce4/xfconf/xfce-perchannel-xml)
-        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/desktop/xfce4-panel.xml DESTINATION ${CONFIG_INSTALL_DIR}/xdg/xfce4/xfconf/xfce-perchannel-xml)
-        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/desktop/xfwm4.xml DESTINATION ${CONFIG_INSTALL_DIR}/xdg/xfce4/xfconf/xfce-perchannel-xml)
 	# Add first boot init scripts
         install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/firstboot/astroberry-os-init DESTINATION ${BIN_INSTALL_DIR})
         install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/firstboot/astroberry-desktop-init DESTINATION ${BIN_INSTALL_DIR})
