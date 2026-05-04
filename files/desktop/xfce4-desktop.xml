@@ -1,0 +1,37 @@
+<?xml version="1.1" encoding="UTF-8"?>
+
+<channel name="xfce4-desktop" version="1.0">
+  <property name="backdrop" type="empty">
+    <property name="screen0" type="empty">
+      <property name="monitor0" type="empty">
+        <property name="brightness" type="empty"/>
+        <property name="color1" type="empty"/>
+        <property name="color2" type="empty"/>
+        <property name="color-style" type="empty"/>
+        <property name="image-path" type="empty"/>
+        <property name="image-show" type="empty"/>
+        <property name="last-image" type="empty"/>
+        <property name="last-single-image" type="empty"/>
+      </property>
+      <property name="monitor1" type="empty">
+        <property name="brightness" type="empty"/>
+        <property name="color1" type="empty"/>
+        <property name="color2" type="empty"/>
+        <property name="color-style" type="empty"/>
+        <property name="image-path" type="empty"/>
+        <property name="image-show" type="empty"/>
+        <property name="last-image" type="empty"/>
+        <property name="last-single-image" type="empty"/>
+      </property>
+      <property name="monitorVNC-0" type="empty">
+        <property name="workspace0" type="empty">
+          <property name="last-image" type="string" value="/usr/share/astroberry-artwork/backgrounds/sci-fi-planet-darkness-night_1920x1080_bw.jpg"/>
+        </property>
+      </property>
+    </property>
+  </property>
+  <property name="desktop-icons" type="empty">
+    <property name="style" type="int" value="0"/>
+  </property>
+  <property name="last-settings-migration-version" type="uint" value="1"/>
+</channel>
