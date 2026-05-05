@@ -6,7 +6,35 @@ set -e
 if [ "$1" == "configure" ]; then
 
 # Set cloud-init
-sed -i "s/instance_id: .*/instance_id: astroberryos-image/g" /boot/firmware/meta-data
+# Raspberry
+if [ "-e /boot/firmware/meta-data" ]; then
+  sed -i "s/instance_id: .*/instance_id: astroberryos-image/g" /boot/firmware/meta-data
+# amd64 version starts from a debootstrap made image, so no default files are present 
+# and need to be created, including the cloud-init config file.
+else
+  mkdir -p /boot/firmware
+  cat <<EOF > /boot/firmware/README
+This folder is here for Astroberry compatibility with scripts
+made to work on the first platform, the Raspberry Pi.
+Leave it as is.
+EOF
+  cat <<EOF > /boot/firmware/meta-data
+dsmode: local
+instance_id: astroberryos-image
+EOF
+cat <<EOF > /etc/cloud/cloud.cfg.d/99-astroberry.cfg
+datasource_list: [ NoCloud, None ]
+datasource:
+  NoCloud:
+    seedfrom: file:///boot/firmware
+
+ssh:
+  emit_keys_to_console: false
+no_ssh_fingerprints: true
+ssh_deletekeys: false
+ssh_genkeytypes: []
+EOF
+fi
 
 cat <<EOF > /boot/firmware/user-data
 #cloud-config
