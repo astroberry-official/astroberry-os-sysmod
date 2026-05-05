@@ -2,8 +2,6 @@
 
 set -xe
 
-UID=1000
-
 while ! pgrep -u astroberry xfsettingsd > /dev/null; do
     sleep 1
 done
