@@ -271,9 +271,9 @@ if [ ! -e /opt/astroberry-manager ]; then python -m venv /opt/astroberry-manager
 update-rc.d lightdm disable
 
 # Enable services
-ln -s /etc/systemd/system/indiwebmanager.service /etc/systemd/system/multi-user.target.wants/
-ln -s /etc/systemd/system/vncserver.service /etc/systemd/system/multi-user.target.wants/
-ln -s /etc/systemd/system/websockify.service /etc/systemd/system/multi-user.target.wants/
-ln -s /etc/systemd/system/astroberry-manager.service /etc/systemd/system/multi-user.target.wants/
+if [ ! -e /etc/systemd/system/multi-user.target.wants/indiwebmanager.service ]; then ln -s /etc/systemd/system/indiwebmanager.service /etc/systemd/system/multi-user.target.wants/; fi
+if [ ! -e /etc/systemd/system/multi-user.target.wants/vncserver.service ]; then ln -s /etc/systemd/system/vncserver.service /etc/systemd/system/multi-user.target.wants/; fi
+if [ ! -e /etc/systemd/system/multi-user.target.wants/websockify.service ]; then ln -s /etc/systemd/system/websockify.service /etc/systemd/system/multi-user.target.wants/; fi
+if [ ! -e /etc/systemd/system/multi-user.target.wants/astroberry-manager.service ]; then ln -s /etc/systemd/system/astroberry-manager.service /etc/systemd/system/multi-user.target.wants/; fi
 
 fi
