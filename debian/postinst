@@ -28,7 +28,7 @@ timezone: Etc/UTC
 runcmd:
 - localectl set-x11-keymap "us" pc105
 - setupcon -k --force || true
-- astroberry-init
+- astroberry-os-init
 EOF
 
 #cat <<EOF > /boot/firmware/network-config
