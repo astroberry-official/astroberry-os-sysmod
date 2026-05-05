@@ -7,7 +7,7 @@ Standards-Version: 3.9.1
 Homepage: http://www.astroberry.io/
 
 Package: astroberry-os-sysmod
-Architecture: arm64
+Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, astroberry-artwork, fonts-roboto,
  polkitd, caddy, network-manager, network-manager-applet, nm-connection-editor,
  python3, python-is-python3, python3-pip, python3-venv, git,
