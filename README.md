@@ -3,11 +3,6 @@ Custom system mods for vanilla Raspberry Pi OS for Astroberry OS.
 
 ## List of mods
 
-- Software repository
-  - Add Astroberry OS certificate
-  - Add Astroberry OS repository
-  - Give priority to Astroberry OS repository
-
 - Distro config directory
   - Add Astroberry OS config directory
   - Add Astroberry OS version file
