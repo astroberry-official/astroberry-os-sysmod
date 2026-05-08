@@ -7,9 +7,9 @@ if [ "$1" == "configure" ]; then
 
 # Set cloud-init
 # Raspberry
-if [ "-e /boot/firmware/meta-data" ]; then
+if [ -e /boot/firmware/meta-data ]; then
   sed -i "s/instance_id: .*/instance_id: astroberryos-image/g" /boot/firmware/meta-data
-# amd64 version starts from a debootstrap made image, so no default files are present 
+# amd64 version starts from a debootstrap made image, so no default files are present
 # and need to be created, including the cloud-init config file.
 else
   mkdir -p /boot/firmware
@@ -146,31 +146,39 @@ EOF
 
 
 # Customize login greeter
-sed -i "s/^#background=.*/background=\/usr\/share\/astroberry-artwork\/backgrounds\/milkyway-galaxy-center-and-its-companions_1920x1080.jpg/g" /etc/lightdm/lightdm-gtk-greeter.conf
-sed -i "s/^#font-name=.*/font-name=Roboto/g" /etc/lightdm/lightdm-gtk-greeter.conf
-echo "default-user-image=/usr/share/astroberry-artwork/icons/astroberry-avatar-500.png" >> /etc/lightdm/lightdm-gtk-greeter.conf
+if [ -e /etc/lightdm/lightdm-gtk-greeter.conf ]; then
+  sed -i "s/^#background=.*/background=\/usr\/share\/astroberry-artwork\/backgrounds\/milkyway-galaxy-center-and-its-companions_1920x1080.jpg/g" /etc/lightdm/lightdm-gtk-greeter.conf
+  sed -i "s/^#font-name=.*/font-name=Roboto/g" /etc/lightdm/lightdm-gtk-greeter.conf
+  echo "default-user-image=/usr/share/astroberry-artwork/icons/astroberry-avatar-500.png" >> /etc/lightdm/lightdm-gtk-greeter.conf
+fi
 
 # Fix vnc slow down on headless system: xfwm4 --compositor=off --vblank=off --replace
-sed -i "s/<value type=\"string\" value=\"xfwm4\"\/>/<value type=\"string\" value=\"xfwm4\"\/><value type=\"string\" value=\"--compositor=off\"\/><value type=\"string\" value=\"--vblank=off\"\/>/g" \
+if [ -e /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml ]; then
+  sed -i "s/<value type=\"string\" value=\"xfwm4\"\/>/<value type=\"string\" value=\"xfwm4\"\/><value type=\"string\" value=\"--compositor=off\"\/><value type=\"string\" value=\"--vblank=off\"\/>/g" \
     /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml
+fi
 
 # Customize GTK settings
-sed -i "s/<property name=\"ThemeName\" type=\"string\" value=\".*\"\/>/<property name=\"ThemeName\" type=\"string\" value=\"Adwaita-dark\"\/>/g" \
+if [ -e /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml ]; then
+  sed -i "s/<property name=\"ThemeName\" type=\"string\" value=\".*\"\/>/<property name=\"ThemeName\" type=\"string\" value=\"Adwaita-dark\"\/>/g" \
     /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
-sed -i "s/<property name=\"FontName\" type=\"string\" value=\".*\"\/>/<property name=\"FontName\" type=\"string\" value=\"Roboto 11\"\/>/g" \
+  sed -i "s/<property name=\"FontName\" type=\"string\" value=\".*\"\/>/<property name=\"FontName\" type=\"string\" value=\"Roboto 11\"\/>/g" \
     /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
-sed -i "s/<property name=\"MonospaceFontName\" type=\"string\" value=\".*\"\/>/<property name=\"MonospaceFontName\" type=\"string\" value=\"Monospace 11\"\/>/g" \
+  sed -i "s/<property name=\"MonospaceFontName\" type=\"string\" value=\".*\"\/>/<property name=\"MonospaceFontName\" type=\"string\" value=\"Monospace 11\"\/>/g" \
     /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
+fi
 
-# Enable dark mode for panels
-sed -i "s/<property name=\"dark-mode\" type=\"bool\" value=\".*\"\/>/<property name=\"dark-mode\" type=\"bool\" value=\"true\"\/>/g" \
+if [ -e /etc/xdg/xfce4/panel/default.xml ]; then
+  # Enable dark mode for panels
+  sed -i "s/<property name=\"dark-mode\" type=\"bool\" value=\".*\"\/>/<property name=\"dark-mode\" type=\"bool\" value=\"true\"\/>/g" \
     /etc/xdg/xfce4/panel/default.xml
 
-# Customize panel 1
-sed -i "s/<property name=\"size\" type=\"uint\" value=\".*\"\/>/<property name=\"size\" type=\"uint\" value=\"38\"\/>/g" \
+  # Customize panel 1
+  sed -i "s/<property name=\"size\" type=\"uint\" value=\".*\"\/>/<property name=\"size\" type=\"uint\" value=\"38\"\/>/g" \
     /etc/xdg/xfce4/panel/default.xml
-sed -i "s/<property name=\"icon-size\" type=\"uint\" value=\".*\"\/>/<property name=\"icon-size\" type=\"uint\" value=\"0\"\/>/g" \
+  sed -i "s/<property name=\"icon-size\" type=\"uint\" value=\".*\"\/>/<property name=\"icon-size\" type=\"uint\" value=\"0\"\/>/g" \
     /etc/xdg/xfce4/panel/default.xml
+fi
 
 # Customize menu layout
 cat <<EOF > /etc/xdg/menus/xfce-applications.menu
