@@ -15,10 +15,6 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.cmake ${CMAKE_CURRENT_BINARY_DIR}/version)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-	# Add APT repository
-	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/apt/astroberry.gpg DESTINATION ${CONFIG_INSTALL_DIR}/apt/keyrings)
-	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/apt/astroberry.sources DESTINATION ${CONFIG_INSTALL_DIR}/apt/sources.list.d)
-	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/apt/astroberry-pin DESTINATION ${CONFIG_INSTALL_DIR}/apt/preferences.d)
 	# Add polkit rules
 	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/polkit/10-power-manager.rules DESTINATION ${CONFIG_INSTALL_DIR}/polkit-1/rules.d)
         install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/polkit/10-file-manager.rules DESTINATION ${CONFIG_INSTALL_DIR}/polkit-1/rules.d)
