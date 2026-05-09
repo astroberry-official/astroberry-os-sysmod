@@ -5,7 +5,7 @@ After=multi-user.target
 [Service]
 Type=idle
 User=astroberry
-ExecStart=sh -c "/opt/astroberry-manager/bin/websockify 127.0.0.1:8070 127.0.0.1:5970 --auth-plugin ExpectOrigin --auth-source \"https://astroberry.local http://astroberry.local\""
+ExecStart=sh -c "/opt/astroberry-manager/bin/websockify 127.0.0.1:8070 127.0.0.1:5970"
 Restart=always
 RestartSec=3
 
