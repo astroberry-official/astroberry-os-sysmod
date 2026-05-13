@@ -1,9 +1,7 @@
 #!/bin/bash
 # prerm script for astroberry-os-sysmod
 
-set -e
-
-if [ "$1" == "remove" ]; then
+if [ "$1" = "remove" ]; then
 
     # Unset wireless regulatory domain
     if [ -e /boot/firmware/cmdline.txt ] && [ -n "$(grep cfg80211.ieee80211_regdom=GB /boot/firmware/cmdline.txt)" ]; then

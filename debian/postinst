@@ -1,8 +1,6 @@
 #!/bin/bash
 # postinst script for astroberry-os-sysmod
 
-set -e
-
 if [ "$1" = "configure" ]; then
 
     # Set wireless regulatory domain
