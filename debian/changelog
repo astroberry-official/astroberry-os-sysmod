@@ -1,5 +1,11 @@
-astroberry-os-sysmod (3.2) main; urgency=medium
+astroberry-os-sysmod (3.2.1) main; urgency=medium
+
+  * Maintenance release of Astroberry OS system mods
+
+ -- Astroberry <contact@astroberry.io>  Mon, 12 May 2026 22:28:18 +0200
+
+astroberry-os-sysmod (3.2.0) main; urgency=medium
 
   * Initial release of packaged Astroberry OS system mods
 
- -- Astroberry <contact@astroberry.io>  Mon, 13 Apr 2026 11:19:18 +0200
+ -- Astroberry <contact@astroberry.io>  Mon, 10 May 2026 14:13:18 +0200

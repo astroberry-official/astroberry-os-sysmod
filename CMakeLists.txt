@@ -5,8 +5,8 @@ set (VERSION_MAJOR 3)
 set (VERSION_MINOR 2)
 set (VERSION_RELEASE 0)
 
+set(BOOT_INSTALL_DIR "/boot/firmware")
 set(CONFIG_INSTALL_DIR "/etc")
-set(BOOT_INSTALL_DIR "/boot")
 set(BIN_INSTALL_DIR "/usr/bin")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
@@ -15,22 +15,58 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.cmake ${CMAKE_CURRENT_BINARY_DIR}/version)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-	# Add polkit rules
-	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/polkit/10-power-manager.rules DESTINATION ${CONFIG_INSTALL_DIR}/polkit-1/rules.d)
-        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/polkit/10-file-manager.rules DESTINATION ${CONFIG_INSTALL_DIR}/polkit-1/rules.d)
-        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/polkit/10-network-manager.rules DESTINATION ${CONFIG_INSTALL_DIR}/polkit-1/rules.d)
-	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/polkit/10-synaptic.rules DESTINATION ${CONFIG_INSTALL_DIR}/polkit-1/rules.d)
-	# Add system services
-	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/services/vncserver.service DESTINATION ${CONFIG_INSTALL_DIR}/systemd/system)
-	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/services/indiwebmanager.service DESTINATION ${CONFIG_INSTALL_DIR}/systemd/system)
-	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/services/websockify.service DESTINATION ${CONFIG_INSTALL_DIR}/systemd/system)
-        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/services/astroberry-manager.service DESTINATION ${CONFIG_INSTALL_DIR}/systemd/system)
-        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/services/astroberry.service DESTINATION ${CONFIG_INSTALL_DIR}/avahi/services)
-	# Add hotspot
-        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/hotspot/Hotspot.nmconnection DESTINATION ${CONFIG_INSTALL_DIR}/NetworkManager/system-connections PERMISSIONS OWNER_READ OWNER_WRITE)
-	# Add first boot init scripts
-        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/firstboot/astroberry-os-init DESTINATION ${BIN_INSTALL_DIR})
-        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/firstboot/astroberry-desktop-init DESTINATION ${BIN_INSTALL_DIR})
-	# Add Astroberry OS version file
+
+	# First boot init scripts
+	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/usr/bin/astroberry-os-init DESTINATION ${BIN_INSTALL_DIR})
+
+	# Cloud-init config files
+	if (${CMAKE_SYSTEM_PROCESSOR} MATCHES "^(x86_64|amd64)|^i[3-6]86")
+		install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/boot/firmware/meta-data DESTINATION ${BOOT_INSTALL_DIR})
+		install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/boot/firmware/user-data DESTINATION ${BOOT_INSTALL_DIR})
+		install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/boot/firmware/network-config DESTINATION ${BOOT_INSTALL_DIR})
+		install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/cloud/cloud.cfg.d/99-astroberry.cfg DESTINATION ${CONFIG_INSTALL_DIR}/cloud/cloud.cfg.d)
+	elseif(${CMAKE_SYSTEM_PROCESSOR} MATCHES "^arm")
+		install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/boot/firmware/meta-data DESTINATION ${BOOT_INSTALL_DIR})
+		install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/boot/firmware/user-data DESTINATION ${BOOT_INSTALL_DIR})
+		install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/boot/firmware/network-config DESTINATION ${BOOT_INSTALL_DIR})
+	else ()
+		message(FATAL_ERROR "Unsupported architecture: ${CMAKE_SYSTEM_PROCESSOR}")
+	endif()
+
+	# Hotspot
+        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/NetworkManager/system-connections/Hotspot.nmconnection DESTINATION ${CONFIG_INSTALL_DIR}/NetworkManager/system-connections
+		PERMISSIONS OWNER_READ OWNER_WRITE)
+
+	# Caddy config file
+	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/caddy/Caddyfile DESTINATION ${CONFIG_INSTALL_DIR}/caddy)
+
+	# Samba config file
+	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/samba/smb.conf DESTINATION ${CONFIG_INSTALL_DIR}/samba)
+
+	# Polkit rules
+	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/polkit-1/rules.d/99-astroberry.rules DESTINATION ${CONFIG_INSTALL_DIR}/polkit-1/rules.d)
+
+	# System services
+	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/systemd/system/astroberry-desktop-web.service DESTINATION ${CONFIG_INSTALL_DIR}/systemd/system)
+        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/systemd/system/astroberry-desktop-vnc.service DESTINATION ${CONFIG_INSTALL_DIR}/systemd/system)
+	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/systemd/system/astroberry-indiwebmanager.service DESTINATION ${CONFIG_INSTALL_DIR}/systemd/system)
+	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/systemd/system/astroberry-websockify.service DESTINATION ${CONFIG_INSTALL_DIR}/systemd/system)
+
+        # Avahi services
+        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/avahi/services/astroberry.service DESTINATION ${CONFIG_INSTALL_DIR}/avahi/services)
+
+        # Lightdm
+        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/lightdm/lightdm-gtk-greeter.conf DESTINATION ${CONFIG_INSTALL_DIR}/lightdm)
+
+        # XFCE
+        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml DESTINATION ${CONFIG_INSTALL_DIR}/xdg/xfce4/xfconf/xfce-perchannel-xml)
+        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml DESTINATION ${CONFIG_INSTALL_DIR}/xdg/xfce4/xfconf/xfce-perchannel-xml)
+        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml DESTINATION ${CONFIG_INSTALL_DIR}/xdg/xfce4/xfconf/xfce-perchannel-xml)
+	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml DESTINATION ${CONFIG_INSTALL_DIR}/xdg/xfce4/xfconf/xfce-perchannel-xml)
+	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/xdg/xfce4/panel/default.xml DESTINATION ${CONFIG_INSTALL_DIR}/xdg/xfce4/panel)
+        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/xdg/menus/xfce-applications.menu DESTINATION ${CONFIG_INSTALL_DIR}/xdg/menus)
+
+	# Astroberry OS version file
 	install(FILES ${CMAKE_CURRENT_BINARY_DIR}/version DESTINATION ${CONFIG_INSTALL_DIR}/astroberry)
+
 endif()

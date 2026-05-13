@@ -1,11 +1,10 @@
 [Unit]
 Description=INDI Web Manager
-After=multi-user.target
 
 [Service]
 Type=idle
 User=astroberry
-ExecStart=sh -c "/opt/astroberry-manager/bin/indi-web --host 127.0.0.1"
+ExecStart=indi-web --host 127.0.0.1
 
 Restart=always
 RestartSec=3

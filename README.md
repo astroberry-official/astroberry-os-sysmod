@@ -40,9 +40,6 @@ Custom system mods for vanilla Raspberry Pi OS for Astroberry OS.
   - Set wireless regulatory domain
   - Configure Hotspot
 
-- Other
-  - Add astroberry-os-init script invoked by cloud-init at the first boot
-  - Add desktop init script invoked by astroberry-os-init at the first boot
+- Other tweaks
+  - Add astroberry-os-init invoked on first boot by cloud-init
   - Remove astrodmx from top level menu
-  - Disable graphical login
-  - Install astroberry-manager

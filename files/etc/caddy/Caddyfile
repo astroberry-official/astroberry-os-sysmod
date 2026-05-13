@@ -1,0 +1,21 @@
+# This configuration is provided by astroberry-os-sysmod
+
+{
+	auto_https disable_redirects
+}
+
+http://, https:// {
+        tls internal
+        tls {
+                on_demand
+        }
+        handle /api* {
+            reverse_proxy localhost:8624
+        }
+        handle /websockify* {
+            reverse_proxy localhost:8070
+        }
+        handle /* {
+            reverse_proxy localhost:8080
+        }
+}

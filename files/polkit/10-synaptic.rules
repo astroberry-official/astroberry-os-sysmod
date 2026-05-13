@@ -1,6 +1,0 @@
-polkit.addRule(function(action, subject) {
-  if (action.id.indexOf("com.ubuntu.pkexec.synaptic") == 0 &&
-      subject.isInGroup("sudo")) {
-    return polkit.Result.YES;
-  }
-});

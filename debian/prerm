@@ -1,13 +1,22 @@
 #!/bin/bash
 # prerm script for astroberry-os-sysmod
 
-if [ "$1" == "remove" -o "$1" == "purge" ]; then
+set -e
 
-        # Disable services
-        systemctl stop astroberry-manager.service && systemctl disable astroberry-manager.service
-	if [ -e /opt/astroberry-manager ]; then rm -rf /opt/astroberry-manager; fi
-        systemctl stop indiwebmanager.service && systemctl disable indiwebmanager.service
-        systemctl stop vncserver.service && systemctl disable vncserver.service
-        systemctl stop websockify.service && systemctl disable websockify.service
+if [ "$1" == "remove" ]; then
+
+    # Unset wireless regulatory domain
+    if [ -e /boot/firmware/cmdline.txt ] && [ -n "$(grep cfg80211.ieee80211_regdom=GB /boot/firmware/cmdline.txt)" ]; then
+        sed -i -e "s/\ cfg80211.ieee80211_regdom=GB//g" /boot/firmware/cmdline.txt
+    fi
+
+    # Restore default desktop background
+    update-alternatives --remove desktop-background /usr/share/astroberry-artwork/backgrounds/sci-fi-planet-darkness-night_1920x1080_bw.jpg
+
+    # Stop and disable services
+    systemctl stop astroberry-indiwebmanager.service && systemctl disable astroberry-indiwebmanager.service
+    systemctl stop astroberry-desktop-web.service && systemctl disable astroberry-desktop-web.service
+    systemctl stop astroberry-desktop-vnc.service && systemctl disable astroberry-desktop-vnc.service
+    systemctl stop astroberry-websockify.service && systemctl disable astroberry-websockify.service
 
 fi

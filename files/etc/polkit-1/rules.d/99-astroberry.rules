@@ -1,0 +1,72 @@
+// Mounting, checking, etc. of internal drives
+polkit.addRule(function(action, subject) {
+    if ((action.id == "org.freedesktop.udisks2.filesystem-mount-system" ||
+         action.id == "org.freedesktop.udisks2.encrypted-unlock-system" ||
+         action.id == "org.freedesktop.udisks2.filesystem-fstab") &&
+        subject.active == true && subject.local == true &&
+        subject.isInGroup("sudo")) {
+            return polkit.Result.YES;
+    }
+});
+
+// Configuring network settings
+polkit.addRule(function(action, subject) {
+  if (action.id.indexOf("org.freedesktop.NetworkManager.") == 0 &&
+      subject.isInGroup("sudo")) {
+    return polkit.Result.YES;
+  }
+});
+
+// Power off and reboot
+polkit.addRule(function(action, subject) {
+  if ((action.id.indexOf("org.freedesktop.login1.power-off") == 0 ||
+       action.id.indexOf("org.freedesktop.login1.reboot")) &&
+      subject.isInGroup("sudo")) {
+    return polkit.Result.YES;
+  }
+});
+
+// Updating already installed software
+polkit.addRule(function(action, subject) {
+    if (action.id == "org.debian.apt.upgrade-packages" &&
+        subject.active == true && subject.local == true &&
+        subject.isInGroup("sudo")) {
+            return polkit.Result.YES;
+    }
+});
+
+// Using Synaptic package manager
+polkit.addRule(function(action, subject) {
+  if (action.id.indexOf("com.ubuntu.pkexec.synaptic") == 0 &&
+      subject.isInGroup("sudo")) {
+    return polkit.Result.YES;
+  }
+});
+
+// Setting the clock
+polkit.addRule(function(action, subject) {
+    if ((action.id == "org.gnome.controlcenter.datetime.configure" ||
+         action.id == "org.kde.kcontrol.kcmclock.save" ||
+         action.id == "org.freedesktop.timedate1.set-time" ||
+         action.id == "org.freedesktop.timedate1.set-timezone" ||
+         action.id == "org.freedesktop.timedate1.set-local-rtc" ||
+         action.id == "org.freedesktop.timedate1.set-ntp" ||
+         action.id == "com.canonical.controlcenter.datetime.configure" ||
+         action.id == "org.mate.settingsdaemon.datetimemechanism.settime") &&
+        subject.active == true && subject.local == true &&
+        subject.isInGroup("sudo")) {
+            return polkit.Result.YES;
+    }
+});
+
+// Setting the hostname,locale,keyboard,date/time without prompting
+polkit.addRule(function(action, subject) {
+    if ((action.id == "org.freedesktop.locale1.set-locale" ||
+         action.id == "org.freedesktop.locale1.set-keyboard" ||
+         action.id == "org.freedesktop.hostname1.set-static-hostname" ||
+         action.id == "org.freedesktop.hostname1.set-hostname") &&
+        subject.active == true && subject.local == true &&
+        subject.isInGroup("sudo")) {
+            return polkit.Result.YES;
+    }
+});
