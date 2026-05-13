@@ -1,0 +1,10 @@
+Astroberry OS is powered by Debian GNU/Linux 13 \n \l
+
+Connect to virtual desktop using:
+
+* Web browser http://astroberry.local/
+* VNC Client vnc://astroberry.local:5971
+
+Project website https://www.astroberry.io/
+
+[9;0]

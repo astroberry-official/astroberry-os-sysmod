@@ -1,9 +1,7 @@
-cmake_minimum_required(VERSION 2.8)
-PROJECT(astroberry-os-sysmod NONE)
-
-set (VERSION_MAJOR 3)
-set (VERSION_MINOR 2)
-set (VERSION_RELEASE 0)
+cmake_minimum_required(VERSION 3.16)
+PROJECT(astroberry-os-sysmod NONE
+	VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_RELEASE}
+)
 
 set(BOOT_INSTALL_DIR "/boot/firmware")
 set(CONFIG_INSTALL_DIR "/etc")
@@ -34,7 +32,7 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 	endif()
 
 	# Hotspot
-        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/NetworkManager/system-connections/Hotspot.nmconnection DESTINATION ${CONFIG_INSTALL_DIR}/NetworkManager/system-connections
+	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/NetworkManager/system-connections/Hotspot.nmconnection DESTINATION ${CONFIG_INSTALL_DIR}/NetworkManager/system-connections
 		PERMISSIONS OWNER_READ OWNER_WRITE)
 
 	# Caddy config file
@@ -48,23 +46,28 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 
 	# System services
 	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/systemd/system/astroberry-desktop-web.service DESTINATION ${CONFIG_INSTALL_DIR}/systemd/system)
-        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/systemd/system/astroberry-desktop-vnc.service DESTINATION ${CONFIG_INSTALL_DIR}/systemd/system)
+	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/systemd/system/astroberry-desktop-vnc.service DESTINATION ${CONFIG_INSTALL_DIR}/systemd/system)
 	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/systemd/system/astroberry-indiwebmanager.service DESTINATION ${CONFIG_INSTALL_DIR}/systemd/system)
 	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/systemd/system/astroberry-websockify.service DESTINATION ${CONFIG_INSTALL_DIR}/systemd/system)
 
-        # Avahi services
-        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/avahi/services/astroberry.service DESTINATION ${CONFIG_INSTALL_DIR}/avahi/services)
+	# Avahi services
+	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/avahi/services/astroberry.service DESTINATION ${CONFIG_INSTALL_DIR}/avahi/services)
 
-        # Lightdm
-        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/lightdm/lightdm-gtk-greeter.conf DESTINATION ${CONFIG_INSTALL_DIR}/lightdm)
+	# Lightdm
+	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/lightdm/lightdm-gtk-greeter.conf DESTINATION ${CONFIG_INSTALL_DIR}/lightdm)
 
-        # XFCE
-        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml DESTINATION ${CONFIG_INSTALL_DIR}/xdg/xfce4/xfconf/xfce-perchannel-xml)
-        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml DESTINATION ${CONFIG_INSTALL_DIR}/xdg/xfce4/xfconf/xfce-perchannel-xml)
-        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml DESTINATION ${CONFIG_INSTALL_DIR}/xdg/xfce4/xfconf/xfce-perchannel-xml)
+	# XFCE
+	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml DESTINATION ${CONFIG_INSTALL_DIR}/xdg/xfce4/xfconf/xfce-perchannel-xml)
+	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml DESTINATION ${CONFIG_INSTALL_DIR}/xdg/xfce4/xfconf/xfce-perchannel-xml)
+	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml DESTINATION ${CONFIG_INSTALL_DIR}/xdg/xfce4/xfconf/xfce-perchannel-xml)
 	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml DESTINATION ${CONFIG_INSTALL_DIR}/xdg/xfce4/xfconf/xfce-perchannel-xml)
 	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/xdg/xfce4/panel/default.xml DESTINATION ${CONFIG_INSTALL_DIR}/xdg/xfce4/panel)
-        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/xdg/menus/xfce-applications.menu DESTINATION ${CONFIG_INSTALL_DIR}/xdg/menus)
+	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/xdg/menus/xfce-applications.menu DESTINATION ${CONFIG_INSTALL_DIR}/xdg/menus)
+
+	# Text console banners
+	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/update-motd.d/20-astroberry-os DESTINATION ${CONFIG_INSTALL_DIR}/update-motd.d)
+	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/issue DESTINATION ${CONFIG_INSTALL_DIR})
+	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/issue.net DESTINATION ${CONFIG_INSTALL_DIR})
 
 	# Astroberry OS version file
 	install(FILES ${CMAKE_CURRENT_BINARY_DIR}/version DESTINATION ${CONFIG_INSTALL_DIR}/astroberry)
