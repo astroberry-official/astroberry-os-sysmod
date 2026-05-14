@@ -7,7 +7,7 @@ Standards-Version: 3.9.1
 Homepage: http://www.astroberry.io/
 
 Package: astroberry-os-sysmod
-Architecture: any
+Architecture: all
 Depends: ${shlibs:Depends}, ${misc:Depends}, astroberry-artwork, fonts-roboto,
  polkitd, caddy, network-manager, network-manager-applet, nm-connection-editor,
  tigervnc-standalone-server, tigervnc-scraping-server, samba, avahi-daemon,
