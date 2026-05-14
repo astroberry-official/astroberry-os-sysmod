@@ -20,18 +20,10 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/usr/bin/astroberry-os-init DESTINATION ${BIN_INSTALL_DIR})
 
 	# Cloud-init config files
-	if (${CMAKE_SYSTEM_PROCESSOR} MATCHES "^(x86_64|amd64)|^i[3-6]86")
-		install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/boot/firmware/meta-data DESTINATION ${BOOT_INSTALL_DIR})
-		install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/boot/firmware/user-data DESTINATION ${BOOT_INSTALL_DIR})
-		install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/boot/firmware/network-config DESTINATION ${BOOT_INSTALL_DIR})
-		install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/cloud/cloud.cfg.d/99-astroberry.cfg DESTINATION ${CONFIG_INSTALL_DIR}/cloud/cloud.cfg.d)
-	elseif(${CMAKE_SYSTEM_PROCESSOR} MATCHES "^arm64|^aarch64")
-		install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/boot/firmware/meta-data DESTINATION ${BOOT_INSTALL_DIR})
-		install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/boot/firmware/user-data DESTINATION ${BOOT_INSTALL_DIR})
-		install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/boot/firmware/network-config DESTINATION ${BOOT_INSTALL_DIR})
-	else ()
-		message(FATAL_ERROR "Unsupported architecture: ${CMAKE_SYSTEM_PROCESSOR}")
-	endif()
+	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/boot/firmware/meta-data DESTINATION ${BOOT_INSTALL_DIR})
+	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/boot/firmware/user-data DESTINATION ${BOOT_INSTALL_DIR})
+	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/boot/firmware/network-config DESTINATION ${BOOT_INSTALL_DIR})
+	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/cloud/cloud.cfg.d/99-astroberry.cfg DESTINATION ${CONFIG_INSTALL_DIR}/cloud/cloud.cfg.d)
 
 	# Hotspot
 	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/NetworkManager/system-connections/Hotspot.nmconnection DESTINATION ${CONFIG_INSTALL_DIR}/NetworkManager/system-connections
@@ -44,7 +36,7 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/samba/smb.conf DESTINATION ${CONFIG_INSTALL_DIR}/samba)
 
 	# Polkit rules
-	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/polkit-1/rules.d/99-astroberry.rules DESTINATION ${CONFIG_INSTALL_DIR}/polkit-1/rules.d)
+	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/polkit-1/rules.d/99-astroberry-os.rules DESTINATION ${CONFIG_INSTALL_DIR}/polkit-1/rules.d)
 
 	# System services
 	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/systemd/system/astroberry-desktop-web.service DESTINATION ${CONFIG_INSTALL_DIR}/systemd/system)
@@ -68,8 +60,7 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 
 	# Text console banners
 	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/update-motd.d/20-astroberry-os DESTINATION ${CONFIG_INSTALL_DIR}/update-motd.d)
-	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/issue DESTINATION ${CONFIG_INSTALL_DIR})
-	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/issue.net DESTINATION ${CONFIG_INSTALL_DIR})
+	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/files/etc/issue.d/AstroberryOS.issue DESTINATION ${CONFIG_INSTALL_DIR}/issue.d)
 
 	# Astroberry OS version file
 	install(FILES ${CMAKE_CURRENT_BINARY_DIR}/version DESTINATION ${CONFIG_INSTALL_DIR}/astroberry)

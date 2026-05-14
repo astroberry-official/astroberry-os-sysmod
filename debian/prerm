@@ -3,11 +3,6 @@
 
 if [ "$1" = "remove" ]; then
 
-    # Unset wireless regulatory domain
-    if [ -e /boot/firmware/cmdline.txt ] && [ -n "$(grep cfg80211.ieee80211_regdom=GB /boot/firmware/cmdline.txt)" ]; then
-        sed -i -e "s/\ cfg80211.ieee80211_regdom=GB//g" /boot/firmware/cmdline.txt
-    fi
-
     # Restore default desktop background
     update-alternatives --remove desktop-background /usr/share/astroberry-artwork/backgrounds/sci-fi-planet-darkness-night_1920x1080_bw.jpg
 

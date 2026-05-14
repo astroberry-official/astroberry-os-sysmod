@@ -1,9 +1,3 @@
-astroberry-os-sysmod (3.2.1) main; urgency=medium
-
-  * Update script logic for robustness
-
- -- Astroberry <contact@astroberry.io>  Wed, 14 May 2026 00:30:00 +0200
-
 astroberry-os-sysmod (3.2.0) main; urgency=medium
 
   * Initial release of packaged Astroberry OS system mods
