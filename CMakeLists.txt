@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.16)
-PROJECT(astroberry-os-sysmod NONE
-	VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_RELEASE}
-)
+PROJECT(astroberry-os-sysmod NONE)
+
+set (VERSION_MAJOR 3)
+set (VERSION_MINOR 2)
+set (VERSION_RELEASE 0)
 
 set(BOOT_INSTALL_DIR "/boot/firmware")
 set(CONFIG_INSTALL_DIR "/etc")
