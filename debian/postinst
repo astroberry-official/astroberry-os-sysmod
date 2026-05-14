@@ -3,11 +3,6 @@
 
 if [ "$1" = "configure" ]; then
 
-    # Set wireless regulatory domain
-    if [ -e /boot/firmware/cmdline.txt ] && [ -z "$(grep cfg80211.ieee80211_regdom /boot/firmware/cmdline.txt)" ]; then
-	sed -i -e "s/\s*cfg80211.ieee80211_regdom=\S*//" -e "s/\(.*\)/\1 cfg80211.ieee80211_regdom=GB/" /boot/firmware/cmdline.txt
-    fi
-
     # Set required permissions if cmake failed
     if [ -e /etc/NetworkManager/system-connections/Hotspot.nmconnection ]; then chmod 600 /etc/NetworkManager/system-connections/Hotspot.nmconnection; fi
 
@@ -25,6 +20,28 @@ if [ "$1" = "configure" ]; then
         systemctl enable astroberry-desktop-web.service && systemctl start astroberry-desktop-web.service
         systemctl enable astroberry-desktop-vnc.service && systemctl start astroberry-desktop-vnc.service
         systemctl enable astroberry-websockify.service && systemctl start astroberry-websockify.service
+    fi
+
+    # Make sure that Astroberry repository is up to date
+    if [ ! -e /etc/apt/sources.list.d/astroberry.sources ]; then
+        curl -fsSL https://astroberry.io/debian/astroberry.asc | gpg --dearmor -o /etc/apt/keyrings/astroberry.gpg
+
+        cat <<EOF > /etc/apt/sources.list.d/astroberry.sources
+Types: deb
+URIs: https://astroberry.io/debian/
+Suites: trixie
+Components: main
+Signed-By: /etc/apt/keyrings/astroberry.gpg
+EOF
+    fi
+
+    # Pin Astroberry repository
+    if [ ! -e /etc/apt/preferences.d/astroberry-pin ]; then
+    cat <<EOF > /etc/apt/preferences.d/astroberry-pin
+Package: *
+Pin: origin astroberry.io
+Pin-Priority: 900
+EOF
     fi
 
 fi
