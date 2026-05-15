@@ -6,8 +6,10 @@ if [ "$1" = "configure" ]; then
     # Set required permissions if cmake failed
     if [ -e /etc/NetworkManager/system-connections/Hotspot.nmconnection ]; then chmod 600 /etc/NetworkManager/system-connections/Hotspot.nmconnection; fi
 
-    # Set default desktop background
+    # Set default desktop backgrounds
     update-alternatives --install /usr/share/images/desktop-base/desktop-background desktop-background /usr/share/astroberry-artwork/backgrounds/sci-fi-planet-darkness-night_1920x1080_bw.jpg 80
+    update-alternatives --install /usr/share/images/desktop-base/desktop-grub.png desktop-grub /usr/share/astroberry-artwork/backgrounds/milkyway-galaxy-center-and-its-companions_1920x1080.jpg 80
+    update-alternatives --install /usr/share/images/desktop-base/login-background.svg desktop-login-background /usr/share/astroberry-artwork/backgrounds/milkyway-galaxy-center-and-its-companions_1920x1080.jpg 80
 
     # Enable services
     if [ ! ischroot ]; then
