@@ -5,6 +5,8 @@ if [ "$1" = "remove" ]; then
 
     # Restore default desktop background
     update-alternatives --remove desktop-background /usr/share/astroberry-artwork/backgrounds/sci-fi-planet-darkness-night_1920x1080_bw.jpg
+    update-alternatives --remove desktop-grub /usr/share/astroberry-artwork/backgrounds/milkyway-galaxy-center-and-its-companions_1920x1080.jpg
+    update-alternatives --remove desktop-login-background /usr/share/astroberry-artwork/backgrounds/milkyway-galaxy-center-and-its-companions_1920x1080.jpg
 
     # Stop and disable services
     systemctl stop astroberry-indiwebmanager.service && systemctl disable astroberry-indiwebmanager.service

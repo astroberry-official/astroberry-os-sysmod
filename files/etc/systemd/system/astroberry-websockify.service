@@ -1,5 +1,5 @@
 [Unit]
-Description=Websockify for VNC
+Description=Websockify for Astroberry OS web desktop service
 Requires=astroberry-desktop-web.service
 After=astroberry-desktop-web.service
 
@@ -11,4 +11,4 @@ Restart=always
 RestartSec=3
 
 [Install]
-WantedBy=graphical.target
+WantedBy=multi-user.target
