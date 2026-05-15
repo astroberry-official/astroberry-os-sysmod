@@ -18,11 +18,6 @@
 # /etc/cloud/cloud.cfg.d/99-astroberry.cfg
 # /etc/NetworkManager/system-connections/Hotspot.nmconnection
 # /etc/polkit-1/rules.d/99-astroberry-os.rules
-# /etc/skel/.config/xfce4/panel/default.xml
-# /etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
-# /etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml
-# /etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml
-# /etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
 
 #### Custom config files for other packages.
 #### We need to divert them before they are installed to prevent conflicts.
@@ -30,10 +25,15 @@
 # /boot/firmware/meta-data
 # /boot/firmware/user-data
 # /boot/firmware/network-config
-# /etc/samba/smb.conf 
+# /etc/samba/smb.conf
 # /etc/caddy/Caddyfile
 # /etc/lightdm/lightdm-gtk-greeter.conf
 # /etc/xdg/menus/xfce-applications.menu
+# /etc/xdg/xfce4/panel/default.xml
+# /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
+# /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml
+# /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml
+# /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
 
 if [ "$1" = "install" ] || [ "$1" = "upgrade" ]; then
 
@@ -46,5 +46,10 @@ if [ "$1" = "install" ] || [ "$1" = "upgrade" ]; then
     dpkg-divert --add --package astroberry-os-sysmod --rename --divert /etc/caddy/Caddyfile.orig.dpkg-distrib /etc/caddy/Caddyfile || true
     dpkg-divert --add --package astroberry-os-sysmod --rename --divert /etc/lightdm/lightdm-gtk-greeter.conf.orig.dpkg-distrib /etc/lightdm/lightdm-gtk-greeter.conf || true
     dpkg-divert --add --package astroberry-os-sysmod --rename --divert /etc/xdg/menus/xfce-applications.menu.orig.dpkg-distrib /etc/xdg/menus/xfce-applications.menu || true
+    dpkg-divert --add --package astroberry-os-sysmod --rename --divert /etc/xdg/xfce4/panel/default.xml /etc/xdg/xfce4/panel || true
+    dpkg-divert --add --package astroberry-os-sysmod --rename --divert /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml /etc/xdg/xfce4/xfconf/xfce-perchannel-xml || true
+    dpkg-divert --add --package astroberry-os-sysmod --rename --divert /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml /etc/xdg/xfce4/xfconf/xfce-perchannel-xml || true
+    dpkg-divert --add --package astroberry-os-sysmod --rename --divert /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml /etc/xdg/xfce4/xfconf/xfce-perchannel-xml || true
+    dpkg-divert --add --package astroberry-os-sysmod --rename --divert /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml /etc/xdg/xfce4/xfconf/xfce-perchannel-xml || true
 
 fi
