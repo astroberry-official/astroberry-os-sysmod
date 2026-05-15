@@ -9,7 +9,7 @@
 /etc/update-motd.d/20-astroberry-os
 /etc/lightdm/lightdm-gtk-greeter.conf
 /etc/NetworkManager/system-connections/Hotspot.nmconnection
-/etc/polkit-1/rules.d/99-astroberry.rules
+/etc/polkit-1/rules.d/99-astroberry-os.rules
 /etc/samba/smb.conf
 /etc/systemd/system/astroberry-desktop-vnc.service
 /etc/systemd/system/astroberry-desktop-web.service
