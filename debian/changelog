@@ -1,4 +1,4 @@
-astroberry-os-sysmod (3.2.0) main; urgency=medium
+astroberry-os-sysmod (3.2) stable; urgency=medium
 
   * Initial release of packaged Astroberry OS system mods
 
