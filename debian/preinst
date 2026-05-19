@@ -37,6 +37,38 @@
 
 if [ "$1" = "install" ] || [ "$1" = "upgrade" ]; then
 
+    # Clean legacy config files and revert changes intriduced by astroberry-image-sysmod.sh
+    # in previous installs (before v3.2). Changes are reapplied by this package from v3.2 onwards.
+    VERSION=$(cat /etc/astroberry/version)
+    if [[ "$VERSION" == "3.0" ]] || [[ "$VERSION" == "3.1" ]]; then
+        # Stop services
+        systemctl stop astroberry-manager
+        systemctl stop vncserver
+        systemctl stop indiwebmanager
+        systemctl stop websockify
+        # Delete legacy config files
+        [ -e /etc/polkit-1/rules.d/10-networkmanager.rules ] && rm -rf /etc/polkit-1/rules.d/10-networkmanager.rules
+        [ -e /etc/polkit-1/rules.d/10-synaptic.rules ] && rm -rf /etc/polkit-1/rules.d/10-synaptic.rules
+        [ -e /etc/polkit-1/rules.d/10-power-manager.rules ] && rm -rf /etc/polkit-1/rules.d/10-power-manager.rules
+        [ -e /etc/polkit-1/rules.d/10-file-manager.rules ] && rm -rf /etc/polkit-1/rules.d/10-file-manager.rules
+        [ -e /etc/systemd/system/vncserver.service ] && rm -rf /etc/systemd/system/vncserver.service
+        [ -e /etc/systemd/system/indiwebmanager.service ] && rm -rf /etc/systemd/system/indiwebmanager.service
+        [ -e /etc/systemd/system/websockify.service ] && rm -rf /etc/systemd/system/websockify.service
+        [ -e /etc/systemd/system/astroberry-manager.service ] && rm -rf /etc/systemd/system/astroberry-manager.service
+        [ -e /etc/systemd/system/multi-user.target.wants/vncserver.service ] && rm -rf /etc/systemd/system/multi-user.target.wants/vncserver.service
+        [ -e /etc/systemd/system/multi-user.target.wants/indiwebmanager.service ] && rm -rf /etc/systemd/system/multi-user.target.wants/indiwebmanager.service
+        [ -e /etc/systemd/system/multi-user.target.wants/websockify.service ] && rm -rf /etc/systemd/system/multi-user.target.wants/websockify.service
+        [ -e /etc/systemd/system/multi-user.target.wants/astroberry-manager.service ] && rm -rf /etc/systemd/system/multi-user.target.wants/astroberry-manager.service
+        # Restore default configuration files
+        [ -e /etc/caddy/Caddyfile.default ] && mv /etc/caddy/Caddyfile.default /etc/caddy/Caddyfile
+        [ -e /etc/samba/smb.conf.default ] && mv /etc/samba/smb.conf.default /etc/samba/smb.conf
+        [ -e /etc/xdg/menus/xfce-applications.menu.default ] && mv /etc/xdg/menus/xfce-applications.menu.default /etc/xdg/menus/xfce-applications.menu
+        # Remove legacy Astroberry Manager files
+        [ -d /opt/astroberry-manager ] && rm -rf /opt/astroberry-manager
+        # Re-enable graphical login manager
+        [ -f /usr/sbin/update-rc.d ] && update-rc.d lightdm enable || true
+    fi
+
     # We operate on fat32 so we need to use mv instead of dpkg-divert
     mv /boot/firmware/meta-data /boot/firmware/meta-data.orig.dpkg-distrib || true
     mv /boot/firmware/user-data /boot/firmware/user-data.orig.dpkg-distrib || true
