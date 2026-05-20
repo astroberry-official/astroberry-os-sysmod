@@ -23,7 +23,22 @@
         <property name="last-image" type="string" value="/usr/share/images/desktop-base/default"/>
         <property name="last-single-image" type="empty"/>
       </property>
+      <property name="monitorVirtual-0" type="empty">
+        <property name="workspace0" type="empty">
+          <property name="last-image" type="string" value="/usr/share/images/desktop-base/default"/>
+        </property>
+      </property>
+         <property name="monitorVirtual-1" type="empty">
+        <property name="workspace0" type="empty">
+          <property name="last-image" type="string" value="/usr/share/images/desktop-base/default"/>
+        </property>
+      </property>
       <property name="monitorVNC-0" type="empty">
+        <property name="workspace0" type="empty">
+          <property name="last-image" type="string" value="/usr/share/images/desktop-base/default"/>
+        </property>
+      </property>
+      <property name="monitorVNC-1" type="empty">
         <property name="workspace0" type="empty">
           <property name="last-image" type="string" value="/usr/share/images/desktop-base/default"/>
         </property>
