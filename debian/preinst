@@ -37,9 +37,9 @@
 
 if [ "$1" = "install" ] || [ "$1" = "upgrade" ]; then
 
-    # Clean legacy config files and revert changes intriduced by astroberry-image-sysmod.sh
+    # Clean legacy config files and revert changes introduced by legacy astroberry-image-sysmod.sh
     # in previous installs (before v3.2). Changes are reapplied by this package from v3.2 onwards.
-    VERSION=$(cat /etc/astroberry/version)
+    [ -f /etc/astroberry/version ] && VERSION=$(cat /etc/astroberry/version)
     if [[ "$VERSION" == "3.0" ]] || [[ "$VERSION" == "3.1" ]]; then
         # Stop services
         systemctl stop astroberry-manager
