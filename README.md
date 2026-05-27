@@ -1,45 +1,43 @@
 # astroberry-os-sysmod
-Custom system mods for vanilla Raspberry Pi OS for Astroberry OS.
+System mods for Astroberry OS.
 
 ## List of mods
 
-- Distro config directory
-  - Add Astroberry OS config directory
-  - Add Astroberry OS version file
-
-- Polkit for XFCE
-  - Enable members of netdev group to edit network connections
-  - Enable members of sudo group to manage packages
-  - Enable members of sudo group to reboot and shutdown
-  - Enable members of plugdev group to mount and eject external drives
-
-- Systemd services
-  - Setup TigerVNC service
-  - Setup INDI Web Manager service
-  - Setup Websockify service
-  - Setup Astroberry Manager service
-
-- Network services
-  - Setup file sharing
-  - Enable zeroconf/avahi
-
-- XFCE desktop
-  - Customize login greeter
-  - Fix vnc slow down on headless system: xfwm4 --compositor=off --vblank=off --replace
-  - Customize GTK settings
-  - Enable dark mode for panels
-  - Customize panel 1
-  - Customize menu layout
-
-- Cloud-init
-  - meta-data
-  - user-data
-  - network-config
+- First boot / Cloud-init
+  - meta-data, user-data, network-config
+  - astroberry-os-init invoked on first boot by cloud-init
 
 - Wireless network
-  - Set wireless regulatory domain
-  - Configure Hotspot
+  - Preset wireless regulatory domain
+  - Setup Hotspot
+
+- XFCE desktop
+  - Install backgrounds, logos, icons
+  - Customize login greeter
+  - Fix for low desktop performance on headless system
+  - Customize GTK settings
+  - Enable dark mode for panels
+  - Customize panels
+  - Customize menu layout
+
+- Services
+  - Caddy as web frontend service
+  - TigerVNC services for web desktop and VNC access
+  - Websockify for web desktop
+  - INDI Web Manager as a middle-ware for Astroberry Manager
+  - GPSD service for GPS devices
+  - SMB File sharing
+  - Zeroconf/Avahi
+
+- Polkit user permissions for XFCE
+  - Manage drives
+  - Configure network connections
+  - Power off and reboot
+  - Use Synaptic package manager
+  - Update already installed software
+  - Set system clock, hostname,locale,keyboard,date/time without prompting
 
 - Other tweaks
-  - Add astroberry-os-init invoked on first boot by cloud-init
-  - Remove astrodmx from top level menu
+  - Custom system banners for text console
+  - Basic system dependencies
+  - Some salt and pepper
