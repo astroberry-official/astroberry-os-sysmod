@@ -55,10 +55,10 @@ if [ "$1" = "install" ] || [ "$1" = "upgrade" ]; then
         [ -e /etc/systemd/system/indiwebmanager.service ] && rm -rf /etc/systemd/system/indiwebmanager.service
         [ -e /etc/systemd/system/websockify.service ] && rm -rf /etc/systemd/system/websockify.service
         [ -e /etc/systemd/system/astroberry-manager.service ] && rm -rf /etc/systemd/system/astroberry-manager.service
-        [ -e /etc/systemd/system/multi-user.target.wants/vncserver.service ] && rm -rf /etc/systemd/system/multi-user.target.wants/vncserver.service
-        [ -e /etc/systemd/system/multi-user.target.wants/indiwebmanager.service ] && rm -rf /etc/systemd/system/multi-user.target.wants/indiwebmanager.service
-        [ -e /etc/systemd/system/multi-user.target.wants/websockify.service ] && rm -rf /etc/systemd/system/multi-user.target.wants/websockify.service
-        [ -e /etc/systemd/system/multi-user.target.wants/astroberry-manager.service ] && rm -rf /etc/systemd/system/multi-user.target.wants/astroberry-manager.service
+        [ -L /etc/systemd/system/multi-user.target.wants/vncserver.service ] && rm -rf /etc/systemd/system/multi-user.target.wants/vncserver.service
+        [ -L /etc/systemd/system/multi-user.target.wants/indiwebmanager.service ] && rm -rf /etc/systemd/system/multi-user.target.wants/indiwebmanager.service
+        [ -L /etc/systemd/system/multi-user.target.wants/websockify.service ] && rm -rf /etc/systemd/system/multi-user.target.wants/websockify.service
+        [ -L /etc/systemd/system/multi-user.target.wants/astroberry-manager.service ] && rm -rf /etc/systemd/system/multi-user.target.wants/astroberry-manager.service
         # Restore default configuration files
         [ -e /etc/caddy/Caddyfile.default ] && mv /etc/caddy/Caddyfile.default /etc/caddy/Caddyfile
         [ -e /etc/samba/smb.conf.default ] && mv /etc/samba/smb.conf.default /etc/samba/smb.conf
