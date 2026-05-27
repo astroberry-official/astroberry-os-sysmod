@@ -13,10 +13,10 @@ if [ "$1" = "configure" ]; then
 
     # Enable services
     if [ ! ischroot ]; then
-        if [ ! -e /etc/systemd/system/multi-user.target.wants/astroberry-indiwebmanager.service ]; then ln -s /etc/systemd/system/astroberry-indiwebmanager.service /etc/systemd/system/multi-user.target.wants/; fi
-        if [ ! -e /etc/systemd/system/multi-user.target.wants/astroberry-desktop-web.service ]; then ln -s /etc/systemd/system/astroberry-desktop-web.service /etc/systemd/system/multi-user.target.wants/; fi
-        if [ ! -e /etc/systemd/system/multi-user.target.wants/astroberry-desktop-vnc.service ]; then ln -s /etc/systemd/system/astroberry-desktop-vnc.service /etc/systemd/system/multi-user.target.wants/; fi
-        if [ ! -e /etc/systemd/system/multi-user.target.wants/astroberry-websockify.service ]; then ln -s /etc/systemd/system/astroberry-websockify.service /etc/systemd/system/multi-user.target.wants/; fi
+        if [ ! -e /etc/systemd/system/multi-user.target.wants/astroberry-indiwebmanager.service ]; then ln -fs /etc/systemd/system/astroberry-indiwebmanager.service /etc/systemd/system/multi-user.target.wants/; fi
+        if [ ! -e /etc/systemd/system/multi-user.target.wants/astroberry-desktop-web.service ]; then ln -fs /etc/systemd/system/astroberry-desktop-web.service /etc/systemd/system/multi-user.target.wants/; fi
+        if [ ! -e /etc/systemd/system/multi-user.target.wants/astroberry-desktop-vnc.service ]; then ln -fs /etc/systemd/system/astroberry-desktop-vnc.service /etc/systemd/system/multi-user.target.wants/; fi
+        if [ ! -e /etc/systemd/system/multi-user.target.wants/astroberry-websockify.service ]; then ln -fs /etc/systemd/system/astroberry-websockify.service /etc/systemd/system/multi-user.target.wants/; fi
     else
         systemctl enable astroberry-indiwebmanager.service && systemctl start astroberry-indiwebmanager.service
         systemctl enable astroberry-desktop-web.service && systemctl start astroberry-desktop-web.service
