@@ -9,7 +9,8 @@ Homepage: http://www.astroberry.io/
 Package: astroberry-os-sysmod
 Architecture: all
 Depends: ${shlibs:Depends}, ${misc:Depends}, astroberry-artwork, fonts-roboto,
- polkitd, caddy, network-manager, network-manager-applet, nm-connection-editor,
- tigervnc-standalone-server, tigervnc-scraping-server, samba, avahi-daemon,
- gpsd, gpsd-tools, apparmor-utils
+ cloud-init, polkitd, network-manager, network-manager-applet, nm-connection-editor,
+ lightdm-gtk-greeter, xfce4-panel, xfce4-session, xfce4-settings,
+ samba, avahi-daemon, caddy, tigervnc-standalone-server, tigervnc-scraping-server,
+ python3-websockify, python3-indiweb, gpsd, gpsd-tools, apparmor-utils
 Description: Operating system mods and tweaks for Astroberry OS
