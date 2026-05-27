@@ -21,9 +21,9 @@
 if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
 
     # We operate on fat32 so we need to use mv instead of dpkg-divert
-    mv /boot/firmware/meta-data.orig.dpkg-distrib /boot/firmware/meta-data || true
-    mv /boot/firmware/user-data.orig.dpkg-distrib /boot/firmware/user-data || true
-    mv /boot/firmware/network-config.orig.dpkg-distrib /boot/firmware/network-config || true
+    [ -e /boot/firmware/meta-data.orig.dpkg-distrib ] && mv /boot/firmware/meta-data.orig.dpkg-distrib /boot/firmware/meta-data
+    [ -e /boot/firmware/user-data.orig.dpkg-distrib ] && mv /boot/firmware/user-data.orig.dpkg-distrib /boot/firmware/user-data
+    [ -e /boot/firmware/network-config.orig.dpkg-distrib ] && mv /boot/firmware/network-config.orig.dpkg-distrib /boot/firmware/network-config
 
     dpkg-divert --remove --package astroberry-os-sysmod --rename /etc/samba/smb.conf || true
     dpkg-divert --remove --package astroberry-os-sysmod --rename /etc/caddy/Caddyfile || true
