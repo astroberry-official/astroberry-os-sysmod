@@ -70,9 +70,9 @@ if [ "$1" = "install" ] || [ "$1" = "upgrade" ]; then
     fi
 
     # We operate on fat32 so we need to use mv instead of dpkg-divert
-    mv /boot/firmware/meta-data /boot/firmware/meta-data.orig.dpkg-distrib || true
-    mv /boot/firmware/user-data /boot/firmware/user-data.orig.dpkg-distrib || true
-    mv /boot/firmware/network-config /boot/firmware/network-config.orig.dpkg-distrib || true
+    [ -e /boot/firmware/meta-data ] && mv /boot/firmware/meta-data /boot/firmware/meta-data.orig.dpkg-distrib || true
+    [ -e /boot/firmware/user-data ] && mv /boot/firmware/user-data /boot/firmware/user-data.orig.dpkg-distrib || true
+    [ -e /boot/firmware/network-config ] && mv /boot/firmware/network-config /boot/firmware/network-config.orig.dpkg-distrib || true
 
     dpkg-divert --add --package astroberry-os-sysmod --rename --divert /etc/samba/smb.conf.orig.dpkg-distrib /etc/samba/smb.conf || true
     dpkg-divert --add --package astroberry-os-sysmod --rename --divert /etc/caddy/Caddyfile.orig.dpkg-distrib /etc/caddy/Caddyfile || true
