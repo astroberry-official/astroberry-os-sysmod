@@ -1,28 +1,40 @@
 #!/bin/bash
 # postinst script for astroberry-os-sysmod
 
+# Our own configuration files
+# We don't need to do anything with them, just leave them in place.
+# /etc/avahi/services/astroberry.service
+# /etc/systemd/system/astroberry-desktop-vnc.service
+# /etc/systemd/system/astroberry-desktop-web.service
+# /etc/systemd/system/astroberry-indiwebmanager.service
+# /etc/systemd/system/astroberry-websockify.service
+# /usr/bin/astroberry-os-init
+
+# Drop-in files for AstroberryOS
+# We don't need to do anything with them, just leave them in place.
+# /etc/issue.d/AstroberryOS.issue
+# /etc/update-motd.d/20-astroberry-os
+# /etc/cloud/cloud.cfg.d/99-astroberry.cfg
+# /etc/NetworkManager/system-connections/Hotspot.nmconnection
+# /etc/polkit-1/rules.d/99-astroberry-os.rules
+
+#### Custom config files for other packages.
+#### We need to divert them before they are installed to prevent conflicts.
+#### These are the files that will be replaced by our package.
+# /boot/firmware/meta-data
+# /boot/firmware/user-data
+# /boot/firmware/network-config
+# /etc/samba/smb.conf
+# /etc/caddy/Caddyfile
+# /etc/lightdm/lightdm-gtk-greeter.conf
+# /etc/xdg/menus/xfce-applications.menu
+# /etc/xdg/xfce4/panel/default.xml
+# /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
+# /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml
+# /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml
+# /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
+
 if [ "$1" = "configure" ]; then
-
-    # Set required permissions if cmake failed
-    if [ -e /etc/NetworkManager/system-connections/Hotspot.nmconnection ]; then chmod 600 /etc/NetworkManager/system-connections/Hotspot.nmconnection; fi
-
-    # Set default desktop backgrounds
-    update-alternatives --install /usr/share/images/desktop-base/desktop-background desktop-background /usr/share/astroberry-artwork/backgrounds/sci-fi-planet-darkness-night_1920x1080_bw.jpg 80
-    update-alternatives --install /usr/share/images/desktop-base/login-background.svg desktop-login-background /usr/share/astroberry-artwork/backgrounds/milkyway-galaxy-center-and-its-companions_1920x1080.jpg 80
-    update-alternatives --install /usr/share/images/desktop-base/desktop-grub.png desktop-grub /usr/share/astroberry-artwork/grub/milkyway-galaxy-center-and-its-companions_1920x1080.png 80
-
-    # Enable services
-    if [ ! ischroot ]; then
-        if [ ! -e /etc/systemd/system/multi-user.target.wants/astroberry-indiwebmanager.service ]; then ln -fs /etc/systemd/system/astroberry-indiwebmanager.service /etc/systemd/system/multi-user.target.wants/; fi
-        if [ ! -e /etc/systemd/system/multi-user.target.wants/astroberry-desktop-web.service ]; then ln -fs /etc/systemd/system/astroberry-desktop-web.service /etc/systemd/system/multi-user.target.wants/; fi
-        if [ ! -e /etc/systemd/system/multi-user.target.wants/astroberry-desktop-vnc.service ]; then ln -fs /etc/systemd/system/astroberry-desktop-vnc.service /etc/systemd/system/multi-user.target.wants/; fi
-        if [ ! -e /etc/systemd/system/multi-user.target.wants/astroberry-websockify.service ]; then ln -fs /etc/systemd/system/astroberry-websockify.service /etc/systemd/system/multi-user.target.wants/; fi
-    else
-        systemctl enable astroberry-indiwebmanager.service && systemctl start astroberry-indiwebmanager.service
-        systemctl enable astroberry-desktop-web.service && systemctl start astroberry-desktop-web.service
-        systemctl enable astroberry-desktop-vnc.service && systemctl start astroberry-desktop-vnc.service
-        systemctl enable astroberry-websockify.service && systemctl start astroberry-websockify.service
-    fi
 
     # Make sure that Astroberry repository is up to date
     if [ ! -e /etc/apt/sources.list.d/astroberry.sources ]; then
@@ -51,4 +63,68 @@ Pin-Priority: 900
 EOF
     fi
 
+    # Set required permissions if cmake failed
+    if [ -e /etc/NetworkManager/system-connections/Hotspot.nmconnection ]; then chmod 600 /etc/NetworkManager/system-connections/Hotspot.nmconnection; fi
+
+    # Set default desktop backgrounds
+    update-alternatives --install /usr/share/images/desktop-base/desktop-background desktop-background /usr/share/astroberry-artwork/backgrounds/sci-fi-planet-darkness-night_1920x1080_bw.jpg 80
+    update-alternatives --install /usr/share/images/desktop-base/login-background.svg desktop-login-background /usr/share/astroberry-artwork/backgrounds/milkyway-galaxy-center-and-its-companions_1920x1080.jpg 80
+    update-alternatives --install /usr/share/images/desktop-base/desktop-grub.png desktop-grub /usr/share/astroberry-artwork/grub/milkyway-galaxy-center-and-its-companions_1920x1080.png 80
+
+    # Enable services
+    if [ ! ischroot ]; then
+        if [ ! -e /etc/systemd/system/multi-user.target.wants/astroberry-indiwebmanager.service ]; then ln -fs /etc/systemd/system/astroberry-indiwebmanager.service /etc/systemd/system/multi-user.target.wants/; fi
+        if [ ! -e /etc/systemd/system/multi-user.target.wants/astroberry-desktop-web.service ]; then ln -fs /etc/systemd/system/astroberry-desktop-web.service /etc/systemd/system/multi-user.target.wants/; fi
+        if [ ! -e /etc/systemd/system/multi-user.target.wants/astroberry-desktop-vnc.service ]; then ln -fs /etc/systemd/system/astroberry-desktop-vnc.service /etc/systemd/system/multi-user.target.wants/; fi
+        if [ ! -e /etc/systemd/system/multi-user.target.wants/astroberry-websockify.service ]; then ln -fs /etc/systemd/system/astroberry-websockify.service /etc/systemd/system/multi-user.target.wants/; fi
+    else
+        systemctl enable astroberry-indiwebmanager.service && systemctl start astroberry-indiwebmanager.service
+        systemctl enable astroberry-desktop-web.service && systemctl start astroberry-desktop-web.service
+        systemctl enable astroberry-desktop-vnc.service && systemctl start astroberry-desktop-vnc.service
+        systemctl enable astroberry-websockify.service && systemctl start astroberry-websockify.service
+    fi
+
+    # Implement divert and symlink - https://wiki.debian.org/ConfigPackages
+
+    # We cannot symlink on fat32 so we use mv instead
+    [ -e /boot/firmware/meta-data ] && mv /boot/firmware/meta-data /boot/firmware/meta-data.distrib || true
+    [ -e /boot/firmware/meta-data.astroberry ] && cp /boot/firmware/meta-data.astroberry /boot/firmware/meta-data || true
+
+    [ -e /boot/firmware/user-data ] && mv /boot/firmware/user-data /boot/firmware/user-data.distrib || true
+    [ -e /boot/firmware/user-data.astroberry ] && cp /boot/firmware/user-data.astroberry /boot/firmware/user-data || true
+
+    [ -e /boot/firmware/network-config ] && mv /boot/firmware/network-config /boot/firmware/network-config.distrib || true
+    [ -e /boot/firmware/network-config.astroberry ] && cp /boot/firmware/network-config.astroberry /boot/firmware/network-config || true
+
+    # Use dpkg-divert for regular filesystem files
+    dpkg-divert --add --package astroberry-os-sysmod --rename --divert /etc/samba/smb.conf.distrib /etc/samba/smb.conf || true
+    [ ! -e /etc/samba/smb.conf -o -L /etc/samba/smb.conf ] && ln -sf /etc/samba/smb.conf.astroberry /etc/samba/smb.conf || true
+
+    dpkg-divert --add --package astroberry-os-sysmod --rename --divert /etc/caddy/Caddyfile.distrib /etc/caddy/Caddyfile || true
+    [ ! -e /etc/caddy/Caddyfile -o -L /etc/caddy/Caddyfile ] && ln -sf /etc/caddy/Caddyfile.astroberry /etc/caddy/Caddyfile || true
+
+    dpkg-divert --add --package astroberry-os-sysmod --rename --divert /etc/lightdm/lightdm-gtk-greeter.conf.distrib /etc/lightdm/lightdm-gtk-greeter.conf || true
+    [ ! -e /etc/lightdm/lightdm-gtk-greeter.conf -o -L /etc/lightdm/lightdm-gtk-greeter.conf ] && ln -sf /etc/lightdm/lightdm-gtk-greeter.conf.astroberry /etc/lightdm/lightdm-gtk-greeter.conf || true
+
+    dpkg-divert --add --package astroberry-os-sysmod --rename --divert /etc/xdg/menus/xfce-applications.menu.distrib /etc/xdg/menus/xfce-applications.menu || true
+    [ ! -e /etc/xdg/menus/xfce-applications.menu -o -L /etc/xdg/menus/xfce-applications.menu ] && ln -sf /etc/xdg/menus/xfce-applications.menu.astroberry /etc/xdg/menus/xfce-applications.menu || true
+
+    dpkg-divert --add --package astroberry-os-sysmod --rename --divert /etc/xdg/xfce4/panel/default.xml.distrib /etc/xdg/xfce4/panel/default.xml || true
+    [ ! -e /etc/xdg/xfce4/panel/default.xml -o -L /etc/xdg/xfce4/panel/default.xml ] && ln -sf /etc/xdg/xfce4/panel/default.xml.astroberry /etc/xdg/xfce4/panel/default.xml || true
+
+    dpkg-divert --add --package astroberry-os-sysmod --rename --divert /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml.distrib /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml || true
+    [ ! -e /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml -o -L /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml ] && ln -sf /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml.astroberry /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml || true
+
+    dpkg-divert --add --package astroberry-os-sysmod --rename --divert /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml.distrib /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml || true
+    [ ! -e /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml -o -L /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml ] && ln -sf /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml.astroberry /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml || true
+
+    dpkg-divert --add --package astroberry-os-sysmod --rename --divert /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml.distrib /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml || true
+    [ ! -e /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml -o -L /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml ] && ln -sf /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml.astroberry /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml || true
+
+    dpkg-divert --add --package astroberry-os-sysmod --rename --divert /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml.distrib /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml || true
+    [ ! -e /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml -o -L /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml ] && ln -sf /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml.astroberry /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml || true
+
 fi
+
+#DEBHELPER#
+exit 0
