@@ -1,6 +1,23 @@
 #!/bin/bash
 # prerm script for astroberry-os-sysmod
 
+# Custom config files for other packages.
+# We need to remove the divert when package is removed.
+# The original files are renamed to *.distrib when package is installed.
+# When the package is removed, the original files are restored.
+# /boot/firmware/meta-data
+# /boot/firmware/user-data
+# /boot/firmware/network-config
+# /etc/samba/smb.conf
+# /etc/caddy/Caddyfile
+# /etc/lightdm/lightdm-gtk-greeter.conf
+# /etc/xdg/menus/xfce-applications.menu
+# /etc/xdg/xfce4/panel/default.xml
+# /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
+# /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml
+# /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml
+# /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
+
 if [ "$1" = "remove" ]; then
 
     # Restore default desktop background
@@ -14,4 +31,42 @@ if [ "$1" = "remove" ]; then
     systemctl stop astroberry-desktop-vnc.service && systemctl disable astroberry-desktop-vnc.service
     systemctl stop astroberry-websockify.service && systemctl disable astroberry-websockify.service
 
+    # Implement divert and symlink - https://wiki.debian.org/ConfigPackages
+
+    # Restore files on fat32 filesystems
+    [ -e /boot/firmware/meta-data.distrib ] && mv /boot/firmware/meta-data.distrib /boot/firmware/meta-data || true
+    [ -e /boot/firmware/user-data.distrib ] && mv /boot/firmware/user-data.distrib /boot/firmware/user-data || true
+    [ -e /boot/firmware/network-config.distrib ] && mv /boot/firmware/network-config.distrib /boot/firmware/network-config || true
+
+    # Restore config files
+    [ -L /etc/samba/smb.conf ] && rm /etc/samba/smb.conf || true
+    dpkg-divert --remove --package astroberry-os-sysmod --rename --divert /etc/samba/smb.conf.distrib /etc/samba/smb.conf || true
+
+    [ -L /etc/caddy/Caddyfile ] && rm /etc/caddy/Caddyfile || true
+    dpkg-divert --remove --package astroberry-os-sysmod --rename --divert /etc/caddy/Caddyfile.distrib /etc/caddy/Caddyfile || true
+
+    [ -L /etc/lightdm/lightdm-gtk-greeter.conf ] && rm /etc/lightdm/lightdm-gtk-greeter.conf || true
+    dpkg-divert --remove --package astroberry-os-sysmod --rename --divert /etc/lightdm/lightdm-gtk-greeter.conf.distrib /etc/lightdm/lightdm-gtk-greeter.conf || true
+
+    [ -L /etc/xdg/menus/xfce-applications.menu ] && rm /etc/xdg/menus/xfce-applications.menu || true
+    dpkg-divert --remove --package astroberry-os-sysmod --rename --divert /etc/xdg/menus/xfce-applications.menu.distrib /etc/xdg/menus/xfce-applications.menu || true
+
+    [ -L /etc/xdg/xfce4/panel/default.xml ] && rm /etc/xdg/xfce4/panel/default.xml || true
+    dpkg-divert --remove --package astroberry-os-sysmod --rename --divert /etc/xdg/xfce4/panel/default.xml.distrib /etc/xdg/xfce4/panel/default.xml || true
+
+    [ -L /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml ] && rm /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml || true
+    dpkg-divert --remove --package astroberry-os-sysmod --rename --divert /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml.distrib /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml || true
+
+    [ -L /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml ] && rm /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml || true
+    dpkg-divert --remove --package astroberry-os-sysmod --rename --divert /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml.distrib /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml || true
+
+    [ -L /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml ] && rm /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml || true
+    dpkg-divert --remove --package astroberry-os-sysmod --rename --divert /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml.distrib /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml || true
+
+    [ -L /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml ] && rm /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml || true
+    dpkg-divert --remove --package astroberry-os-sysmod --rename --divert /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml.distrib /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml || true
+
 fi
+
+#DEBHELPER#
+exit 0

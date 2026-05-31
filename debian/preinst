@@ -1,87 +1,47 @@
 #!/bin/bash
 # preinst script for astroberry-os-sysmod
 
-# Our own configuration files
-# We don't need to do anything with them, just leave them in place.
-# /etc/astroberry/version
-# /etc/avahi/services/astroberry.service
-# /etc/systemd/system/astroberry-desktop-vnc.service
-# /etc/systemd/system/astroberry-desktop-web.service
-# /etc/systemd/system/astroberry-indiwebmanager.service
-# /etc/systemd/system/astroberry-websockify.service
-# /usr/bin/astroberry-os-init
-
-# Drop-in files for AstroberryOS
-# We don't need to do anything with them, just leave them in place.
-# /etc/issue.d/AstroberryOS.issue
-# /etc/update-motd.d/20-astroberry-os
-# /etc/cloud/cloud.cfg.d/99-astroberry.cfg
-# /etc/NetworkManager/system-connections/Hotspot.nmconnection
-# /etc/polkit-1/rules.d/99-astroberry-os.rules
-
-#### Custom config files for other packages.
-#### We need to divert them before they are installed to prevent conflicts.
-#### These are the files that will be replaced by our package.
-# /boot/firmware/meta-data
-# /boot/firmware/user-data
-# /boot/firmware/network-config
-# /etc/samba/smb.conf
-# /etc/caddy/Caddyfile
-# /etc/lightdm/lightdm-gtk-greeter.conf
-# /etc/xdg/menus/xfce-applications.menu
-# /etc/xdg/xfce4/panel/default.xml
-# /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
-# /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml
-# /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml
-# /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
-
 if [ "$1" = "install" ] || [ "$1" = "upgrade" ]; then
 
-    # Clean legacy config files and revert changes introduced by legacy astroberry-image-sysmod.sh
-    # in previous installs (before v3.2). Changes are reapplied by this package from v3.2 onwards.
+    # Revert changes introduced by legacy astroberry-image-sysmod.sh before v3.2
+    # Changes are re-applied by this package from v3.2 onwards.
     [ -f /etc/astroberry/version ] && VERSION=$(cat /etc/astroberry/version)
     if [[ "$VERSION" == "3.0" ]] || [[ "$VERSION" == "3.1" ]]; then
-        # Stop services
-        systemctl stop astroberry-manager
-        systemctl stop vncserver
-        systemctl stop indiwebmanager
-        systemctl stop websockify
-        # Delete legacy config files
-        [ -e /etc/polkit-1/rules.d/10-networkmanager.rules ] && rm -rf /etc/polkit-1/rules.d/10-networkmanager.rules
-        [ -e /etc/polkit-1/rules.d/10-synaptic.rules ] && rm -rf /etc/polkit-1/rules.d/10-synaptic.rules
-        [ -e /etc/polkit-1/rules.d/10-power-manager.rules ] && rm -rf /etc/polkit-1/rules.d/10-power-manager.rules
-        [ -e /etc/polkit-1/rules.d/10-file-manager.rules ] && rm -rf /etc/polkit-1/rules.d/10-file-manager.rules
-        [ -e /etc/systemd/system/vncserver.service ] && rm -rf /etc/systemd/system/vncserver.service
-        [ -e /etc/systemd/system/indiwebmanager.service ] && rm -rf /etc/systemd/system/indiwebmanager.service
-        [ -e /etc/systemd/system/websockify.service ] && rm -rf /etc/systemd/system/websockify.service
-        [ -e /etc/systemd/system/astroberry-manager.service ] && rm -rf /etc/systemd/system/astroberry-manager.service
-        [ -L /etc/systemd/system/multi-user.target.wants/vncserver.service ] && rm -rf /etc/systemd/system/multi-user.target.wants/vncserver.service
-        [ -L /etc/systemd/system/multi-user.target.wants/indiwebmanager.service ] && rm -rf /etc/systemd/system/multi-user.target.wants/indiwebmanager.service
-        [ -L /etc/systemd/system/multi-user.target.wants/websockify.service ] && rm -rf /etc/systemd/system/multi-user.target.wants/websockify.service
-        [ -L /etc/systemd/system/multi-user.target.wants/astroberry-manager.service ] && rm -rf /etc/systemd/system/multi-user.target.wants/astroberry-manager.service
-        # Restore default configuration files
-        [ -e /etc/caddy/Caddyfile.default ] && mv /etc/caddy/Caddyfile.default /etc/caddy/Caddyfile
-        [ -e /etc/samba/smb.conf.default ] && mv /etc/samba/smb.conf.default /etc/samba/smb.conf
-        [ -e /etc/xdg/menus/xfce-applications.menu.default ] && mv /etc/xdg/menus/xfce-applications.menu.default /etc/xdg/menus/xfce-applications.menu
-        # Remove legacy Astroberry Manager files
-        [ -d /opt/astroberry-manager ] && rm -rf /opt/astroberry-manager
+
         # Re-enable graphical login manager
-        [ -f /usr/sbin/update-rc.d ] && update-rc.d lightdm enable || true
+        systemctl enable lightdm || true
+
+        # Stop and disable services
+
+        [ -L /etc/systemd/system/multi-user.target.wants/vncserver.service ] && rm /etc/systemd/system/multi-user.target.wants/vncserver.service || true
+        [ -e /etc/systemd/system/vncserver.service ] && systemctl stop vncserver && rm /etc/systemd/system/vncserver.service || true
+
+        [ -L /etc/systemd/system/multi-user.target.wants/indiwebmanager.service ] && rm /etc/systemd/system/multi-user.target.wants/indiwebmanager.service || true
+        [ -e /etc/systemd/system/indiwebmanager.service ] && systemctl stop indiwebmanager && rm /etc/systemd/system/indiwebmanager.service || true
+
+        [ -L /etc/systemd/system/multi-user.target.wants/websockify.service ] && rm /etc/systemd/system/multi-user.target.wants/websockify.service || true
+        [ -e /etc/systemd/system/websockify.service ] && systemctl stop websockify && rm /etc/systemd/system/websockify.service || true
+
+        [ -L /etc/systemd/system/multi-user.target.wants/astroberry-manager.service ] && rm /etc/systemd/system/multi-user.target.wants/astroberry-manager.service || true
+        [ -e /etc/systemd/system/astroberry-manager.service ] && systemctl stop astroberry-manager && rm /etc/systemd/system/astroberry-manager.service || true
+
+        # Remove legacy Astroberry Manager files
+        [ -d /opt/astroberry-manager ] && rm -rf /opt/astroberry-manager || true
+
+        # Delete legacy config files
+        [ -e /etc/polkit-1/rules.d/10-networkmanager.rules ] && rm -rf /etc/polkit-1/rules.d/10-networkmanager.rules || true
+        [ -e /etc/polkit-1/rules.d/10-synaptic.rules ] && rm -rf /etc/polkit-1/rules.d/10-synaptic.rules || true
+        [ -e /etc/polkit-1/rules.d/10-power-manager.rules ] && rm -rf /etc/polkit-1/rules.d/10-power-manager.rules || true
+        [ -e /etc/polkit-1/rules.d/10-file-manager.rules ] && rm -rf /etc/polkit-1/rules.d/10-file-manager.rules || true
+
+        # Restore default configuration files
+        [ -e /etc/caddy/Caddyfile.default ] && mv /etc/caddy/Caddyfile.default /etc/caddy/Caddyfile || true
+        [ -e /etc/samba/smb.conf.default ] && mv /etc/samba/smb.conf.default /etc/samba/smb.conf || true
+        [ -e /etc/xdg/menus/xfce-applications.menu.default ] && mv /etc/xdg/menus/xfce-applications.menu.default /etc/xdg/menus/xfce-applications.menu || true
+
     fi
 
-    # We operate on fat32 so we need to use mv instead of dpkg-divert
-    [ -e /boot/firmware/meta-data ] && mv /boot/firmware/meta-data /boot/firmware/meta-data.orig.dpkg-distrib || true
-    [ -e /boot/firmware/user-data ] && mv /boot/firmware/user-data /boot/firmware/user-data.orig.dpkg-distrib || true
-    [ -e /boot/firmware/network-config ] && mv /boot/firmware/network-config /boot/firmware/network-config.orig.dpkg-distrib || true
-
-    dpkg-divert --add --package astroberry-os-sysmod --rename --divert /etc/samba/smb.conf.orig.dpkg-distrib /etc/samba/smb.conf || true
-    dpkg-divert --add --package astroberry-os-sysmod --rename --divert /etc/caddy/Caddyfile.orig.dpkg-distrib /etc/caddy/Caddyfile || true
-    dpkg-divert --add --package astroberry-os-sysmod --rename --divert /etc/lightdm/lightdm-gtk-greeter.conf.orig.dpkg-distrib /etc/lightdm/lightdm-gtk-greeter.conf || true
-    dpkg-divert --add --package astroberry-os-sysmod --rename --divert /etc/xdg/menus/xfce-applications.menu.orig.dpkg-distrib /etc/xdg/menus/xfce-applications.menu || true
-    dpkg-divert --add --package astroberry-os-sysmod --rename --divert /etc/xdg/xfce4/panel/default.xml.orig.dpkg-distrib /etc/xdg/xfce4/panel/default.xml || true
-    dpkg-divert --add --package astroberry-os-sysmod --rename --divert /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml.orig.dpkg-distrib /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml || true
-    dpkg-divert --add --package astroberry-os-sysmod --rename --divert /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml.orig.dpkg-distrib /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml || true
-    dpkg-divert --add --package astroberry-os-sysmod --rename --divert /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml.orig.dpkg-distrib /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml || true
-    dpkg-divert --add --package astroberry-os-sysmod --rename --divert /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml.orig.dpkg-distrib /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml || true
-
 fi
+
+#DEBHELPER#
+exit 0
