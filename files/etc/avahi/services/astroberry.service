@@ -14,4 +14,8 @@
                 <type>_smb._tcp</type>
                 <port>445</port>
         </service>
+        <service>
+                <type>_rfb._tcp</type>
+                <port>5910</port>
+        </service>
 </service-group>
