@@ -8,7 +8,7 @@ Type=simple
 User=astroberry
 Environment=HOME="/home/astroberry"
 Environment=XAUTHORITY="/home/astroberry/.Xauthority"
-ExecStart=x0tigervncserver -display :70 -desktop astroberry -SecurityTypes Plain -RequireUsername yes -PlainUsers * -localhost no -rfbport 5971 -fg
+ExecStart=x0tigervncserver -display :70 -desktop astroberry -SecurityTypes Plain -RequireUsername yes -PlainUsers * -localhost no -rfbport 5910 -fg
 ExecStop=x0tigervncserver -kill
 Restart=on-failure
 RestartSec=1
