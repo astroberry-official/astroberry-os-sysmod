@@ -33,6 +33,7 @@ if [ "$1" = "install" ] || [ "$1" = "upgrade" ]; then
         [ -e /etc/polkit-1/rules.d/10-synaptic.rules ] && rm -rf /etc/polkit-1/rules.d/10-synaptic.rules || true
         [ -e /etc/polkit-1/rules.d/10-power-manager.rules ] && rm -rf /etc/polkit-1/rules.d/10-power-manager.rules || true
         [ -e /etc/polkit-1/rules.d/10-file-manager.rules ] && rm -rf /etc/polkit-1/rules.d/10-file-manager.rules || true
+        [ -e /etc/avahi/services/astroberry.service ] && rm /etc/avahi/services/astroberry.service || true
 
         # Restore default configuration files
         [ -e /etc/caddy/Caddyfile.default ] && mv /etc/caddy/Caddyfile.default /etc/caddy/Caddyfile || true
