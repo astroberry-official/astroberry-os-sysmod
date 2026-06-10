@@ -1,3 +1,10 @@
+astroberry-os-sysmod (3.2.1) stable; urgency=medium
+
+  * Set default background to all monitors
+  * Correct VNC port number info in the text console banner
+
+ -- Astroberry <contact@astroberry.io>  Wed, 10 Jun 2026 17:54:18 +0200
+
 astroberry-os-sysmod (3.2) stable; urgency=medium
 
   * Initial release of packaged Astroberry OS system mods
