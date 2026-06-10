@@ -17,6 +17,7 @@
 # /etc/cloud/cloud.cfg.d/99-astroberry.cfg
 # /etc/NetworkManager/system-connections/Hotspot.nmconnection
 # /etc/polkit-1/rules.d/99-astroberry-os.rules
+# /etc/X11/xorg.conf.d/90-touchpad.conf
 
 #### Custom config files for other packages.
 #### We need to divert them before they are installed to prevent conflicts.
