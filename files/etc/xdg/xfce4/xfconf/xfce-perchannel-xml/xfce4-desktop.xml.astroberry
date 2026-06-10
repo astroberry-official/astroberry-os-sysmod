@@ -28,7 +28,7 @@
           <property name="last-image" type="string" value="/usr/share/images/desktop-base/default"/>
         </property>
       </property>
-         <property name="monitorVirtual-1" type="empty">
+      <property name="monitorVirtual-1" type="empty">
         <property name="workspace0" type="empty">
           <property name="last-image" type="string" value="/usr/share/images/desktop-base/default"/>
         </property>
@@ -39,6 +39,36 @@
         </property>
       </property>
       <property name="monitorVNC-1" type="empty">
+        <property name="workspace0" type="empty">
+          <property name="last-image" type="string" value="/usr/share/images/desktop-base/default"/>
+        </property>
+      </property>
+      <property name="monitoreDP-1" type="empty">
+        <property name="workspace0" type="empty">
+          <property name="last-image" type="string" value="/usr/share/images/desktop-base/default"/>
+        </property>
+      </property>
+      <property name="monitoreDP-2" type="empty">
+        <property name="workspace0" type="empty">
+          <property name="last-image" type="string" value="/usr/share/images/desktop-base/default"/>
+        </property>
+      </property>
+      <property name="monitorDP-1" type="empty">
+        <property name="workspace0" type="empty">
+          <property name="last-image" type="string" value="/usr/share/images/desktop-base/default"/>
+        </property>
+      </property>
+      <property name="monitorDP-2" type="empty">
+        <property name="workspace0" type="empty">
+          <property name="last-image" type="string" value="/usr/share/images/desktop-base/default"/>
+        </property>
+      </property>
+      <property name="monitorHDMI-1" type="empty">
+        <property name="workspace0" type="empty">
+          <property name="last-image" type="string" value="/usr/share/images/desktop-base/default"/>
+        </property>
+      </property>
+      <property name="monitorHDMI-2" type="empty">
         <property name="workspace0" type="empty">
           <property name="last-image" type="string" value="/usr/share/images/desktop-base/default"/>
         </property>
