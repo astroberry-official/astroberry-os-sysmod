@@ -22,3 +22,4 @@ files/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml.astroberry etc/
 files/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml.astroberry etc/xdg/xfce4/xfconf/xfce-perchannel-xml
 files/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml.astroberry etc/xdg/xfce4/xfconf/xfce-perchannel-xml
 files/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml.astroberry etc/xdg/xfce4/xfconf/xfce-perchannel-xml
+files/etc/X11/xorg.conf.d/90-touchpad.conf etc/X11/xorg.conf.d
